@@ -8,6 +8,7 @@ async function run(): Promise<void> {
     core.info(`Hello Vostok`)
 
     const cementZip = await axios.get("https://github.com/skbkontur/cement/releases/download/v1.0.58/63d70a890a8a69703c066965196021afb7a793c1.zip", { responseType: "arraybuffer" });
+    console.log(cementZip)
     await fs.promises.writeFile("cement.zip", cementZip.data);
     
     const projectsGlobber = await glob.create(['*/*.csproj', '!*.Tests/*.csproj'].join('\n'))
