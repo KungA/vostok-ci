@@ -13,14 +13,14 @@ async function run(): Promise<void> {
     const cementAchve = await axios.get("https://github.com/skbkontur/cement/releases/download/v1.0.58/63d70a890a8a69703c066965196021afb7a793c1.zip", { responseType: "arraybuffer" })
     await fs.promises.writeFile("cement.zip", cementAchve.data)
     const cementZip = new admzip("cement.zip")
-    cementZip.extractAllTo(".cement")
+    cementZip.extractAllTo("cement-zip")
 
     core.startGroup("Install Cement")
     if (os.platform() !== 'win32') {
-      await exec.exec("chmod +x ./install.sh", [], {cwd: ".cement/dotnet"});
-      await exec.exec("./install.sh", [], {cwd: ".cement/dotnet"});
+      await exec.exec("chmod +x ./install.sh", [], {cwd: "cement-zip/dotnet"});
+      await exec.exec("./install.sh", [], {cwd: "cement-zip/dotnet"});
     } else {
-      await exec.exec("./install.cmd", [], {cwd: ".cement/dotnet"});
+      await exec.exec("./install.cmd", [], {cwd: "cement-zip/dotnet"});
     }
     core.addPath(`${os.homedir()}/bin`)
     await exec.exec("cm", ["--version"]);

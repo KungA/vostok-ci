@@ -11076,14 +11076,14 @@ function run() {
             const cementAchve = yield axios.get("https://github.com/skbkontur/cement/releases/download/v1.0.58/63d70a890a8a69703c066965196021afb7a793c1.zip", { responseType: "arraybuffer" });
             yield fs__WEBPACK_IMPORTED_MODULE_3__.promises.writeFile("cement.zip", cementAchve.data);
             const cementZip = new admzip("cement.zip");
-            cementZip.extractAllTo(".cement");
+            cementZip.extractAllTo("cement-zip");
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Install Cement");
             if (os__WEBPACK_IMPORTED_MODULE_4__.platform() !== 'win32') {
-                yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("chmod +x ./install.sh", [], { cwd: ".cement/dotnet" });
-                yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.sh", [], { cwd: ".cement/dotnet" });
+                yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("chmod +x ./install.sh", [], { cwd: "cement-zip/dotnet" });
+                yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.sh", [], { cwd: "cement-zip/dotnet" });
             }
             else {
-                yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.cmd", [], { cwd: ".cement/dotnet" });
+                yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.cmd", [], { cwd: "cement-zip/dotnet" });
             }
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${os__WEBPACK_IMPORTED_MODULE_4__.homedir()}/bin`);
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["--version"]);
