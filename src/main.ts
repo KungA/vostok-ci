@@ -1,8 +1,9 @@
 import * as core from '@actions/core'
 import * as glob from '@actions/glob'
 import * as exec from '@actions/exec'
+import * as github from '@actions/github'
 import * as fs from 'fs'
-import {startGroup} from "@actions/core";
+import * as os from 'os'
 const axios = require('axios');
 const admzip = require('adm-zip');
 
@@ -15,8 +16,13 @@ async function run(): Promise<void> {
     cementZip.extractAllTo(".cement")
 
     core.startGroup("Install Cement")
-    await exec.exec("chmod +x ./install.sh", [], {cwd: ".cement/dotnet"});
-    await exec.exec("./install.sh", [], {cwd: ".cement/dotnet"});
+    console.log(os.platform())
+    if (os.platform() === 'win32') {
+      await exec.exec("chmod +x ./install.sh", [], {cwd: ".cement/dotnet"});
+      await exec.exec("./install.sh", [], {cwd: ".cement/dotnet"});
+    } else {
+      await exec.exec("./install.cmd", [], {cwd: ".cement/dotnet"});
+    }
     core.addPath("/home/runner/bin")
     await exec.exec("cm", ["--version"]);
 

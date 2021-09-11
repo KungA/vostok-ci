@@ -11051,6 +11051,8 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_exec__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_actions_exec__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(5747);
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__nccwpck_require__.n(fs__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var os__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(2087);
+/* harmony import */ var os__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__nccwpck_require__.n(os__WEBPACK_IMPORTED_MODULE_4__);
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -11060,6 +11062,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 
 
 
@@ -11075,8 +11078,14 @@ function run() {
             const cementZip = new admzip("cement.zip");
             cementZip.extractAllTo(".cement");
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Install Cement");
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("chmod +x ./install.sh", [], { cwd: ".cement/dotnet" });
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.sh", [], { cwd: ".cement/dotnet" });
+            console.log(os__WEBPACK_IMPORTED_MODULE_4__.platform());
+            if (os__WEBPACK_IMPORTED_MODULE_4__.platform() === 'win32') {
+                yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("chmod +x ./install.sh", [], { cwd: ".cement/dotnet" });
+                yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.sh", [], { cwd: ".cement/dotnet" });
+            }
+            else {
+                yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.cmd", [], { cwd: ".cement/dotnet" });
+            }
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath("/home/runner/bin");
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["--version"]);
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Locate projects");
