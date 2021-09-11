@@ -3,7 +3,7 @@ import * as glob from '@actions/glob'
 
 async function run(): Promise<void> {
   try {
-    core.info(`Hello Vostok`)
+    core.info(`Hello Vostok 2`)
 
     const projectsGlobber = await glob.create(['!*.Tests'].join('\n'))
     const projects = await projectsGlobber.glob()
