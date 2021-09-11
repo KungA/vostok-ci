@@ -5,7 +5,7 @@ async function run(): Promise<void> {
   try {
     core.info(`Hello Vostok`)
 
-    const projectsGlobber = await glob.create(['*.csproj', '!*.Tests/*.csproj'].join('\n'))
+    const projectsGlobber = await glob.create(['*/*.csproj'].join('\n'))
     const projects = await projectsGlobber.glob()
     console.log(projects)
     
