@@ -32,7 +32,7 @@ async function run(): Promise<void> {
 
     core.startGroup("Download dependencies")
     await exec.exec("cm", ["init"], {cwd: ".."});
-    await exec.exec("cm", ["update-deps"]);
+    await exec.exec("cm", ["update-deps"], {cwd: "."});
 
     core.startGroup("Build dependencies")
     await exec.exec("cm", ["build-deps"]);
