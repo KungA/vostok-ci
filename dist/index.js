@@ -11069,16 +11069,17 @@ const admzip = __nccwpck_require__(6761);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Downloading Cement..");
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Download Cement");
             const cementAchve = yield axios.get("https://github.com/skbkontur/cement/releases/download/v1.0.58/63d70a890a8a69703c066965196021afb7a793c1.zip", { responseType: "arraybuffer" });
             yield fs__WEBPACK_IMPORTED_MODULE_3__.promises.writeFile("cement.zip", cementAchve.data);
             const cementZip = new admzip("cement.zip");
             cementZip.extractAllTo(".cement");
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Installing Cement..");
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Install Cement");
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("chmod +x ./install.sh", [], { cwd: ".cement/dotnet" });
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.sh", [], { cwd: ".cement/dotnet" });
             //core.addPath("~/bin")
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("/home/runner/bin/cm", ["--version"]);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Locate projects");
             const projectsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"));
             const projects = yield projectsGlobber.glob();
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected projects: ${projects}`);
