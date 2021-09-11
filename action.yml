@@ -1,10 +1,6 @@
 name: 'Vostok CI'
 description: 'Vostok CI'
-inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+author: 'Vostok'
 runs:
   using: 'node12'
   main: 'dist/index.js'
