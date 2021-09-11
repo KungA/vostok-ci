@@ -11091,6 +11091,11 @@ function run() {
             const projectsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"));
             const projects = yield projectsGlobber.glob();
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected projects: ${projects}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Download dependencies");
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["init"], { cwd: ".." });
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["update-deps"]);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Build dependencies");
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["build-deps"]);
             const testsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*.Tests/*.csproj"].join("\n"));
             const tests = yield testsGlobber.glob();
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected tests: ${tests}`);

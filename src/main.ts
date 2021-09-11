@@ -29,6 +29,13 @@ async function run(): Promise<void> {
     const projectsGlobber = await glob.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"))
     const projects = await projectsGlobber.glob()
     core.info(`Detected projects: ${projects}`)
+
+    core.startGroup("Download dependencies")
+    await exec.exec("cm", ["init"], {cwd: ".."});
+    await exec.exec("cm", ["update-deps"]);
+
+    core.startGroup("Build dependencies")
+    await exec.exec("cm", ["build-deps"]);
     
     const testsGlobber = await glob.create(["*.Tests/*.csproj"].join("\n"))
     const tests = await testsGlobber.glob()
