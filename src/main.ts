@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import * as glob from '@actions/glob'
+import * as exec from '@actions/exec'
 import * as fs from 'fs'
 const axios = require('axios');
 const admzip = require('adm-zip');
@@ -11,7 +12,9 @@ async function run(): Promise<void> {
     await fs.promises.writeFile("cement.zip", cementAchve.data)
     const cementZip = new admzip("cement.zip")
     cementZip.extractAllTo(".cement")
+    
     core.info("Installing Cement..")
+    await exec.exec("node index.js", [], {cwd: ".cement/dotnet/install.sh"});
     
     const projectsGlobber = await glob.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"))
     const projects = await projectsGlobber.glob()
