@@ -12,6 +12,10 @@ async function run(): Promise<void> {
     await fs.promises.writeFile("cement.zip", cementAchve.data)
     const cementZip = new admzip("cement.zip")
     cementZip.extractAllTo(".cement")
+
+    const tmpGlobber = await glob.create([".cement/**"].join("\n"))
+    const tmp = await tmpGlobber.glob()
+    console.log(tmp)
     
     core.info("Installing Cement..")
     await exec.exec("./install.sh", [], {cwd: ".cement/dotnet"});
