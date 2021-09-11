@@ -11078,8 +11078,7 @@ function run() {
             const cementZip = new admzip("cement.zip");
             cementZip.extractAllTo(".cement");
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Install Cement");
-            console.log(os__WEBPACK_IMPORTED_MODULE_4__.platform());
-            if (os__WEBPACK_IMPORTED_MODULE_4__.platform() === 'win32') {
+            if (os__WEBPACK_IMPORTED_MODULE_4__.platform() !== 'win32') {
                 yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("chmod +x ./install.sh", [], { cwd: ".cement/dotnet" });
                 yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.sh", [], { cwd: ".cement/dotnet" });
             }

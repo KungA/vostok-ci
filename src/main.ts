@@ -16,8 +16,7 @@ async function run(): Promise<void> {
     cementZip.extractAllTo(".cement")
 
     core.startGroup("Install Cement")
-    console.log(os.platform())
-    if (os.platform() === 'win32') {
+    if (os.platform() !== 'win32') {
       await exec.exec("chmod +x ./install.sh", [], {cwd: ".cement/dotnet"});
       await exec.exec("./install.sh", [], {cwd: ".cement/dotnet"});
     } else {
