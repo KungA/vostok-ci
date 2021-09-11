@@ -17,8 +17,8 @@ async function run(): Promise<void> {
     core.startGroup("Install Cement")
     await exec.exec("chmod +x ./install.sh", [], {cwd: ".cement/dotnet"});
     await exec.exec("./install.sh", [], {cwd: ".cement/dotnet"});
-    //core.addPath("~/bin")
-    await exec.exec("/home/runner/bin/cm", ["--version"]);
+    core.addPath("/home/runner/bin")
+    await exec.exec("cm", ["--version"]);
 
     core.startGroup("Locate projects")
     const projectsGlobber = await glob.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"))
