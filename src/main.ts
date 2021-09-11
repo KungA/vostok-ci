@@ -9,9 +9,9 @@ async function run(): Promise<void> {
     core.info(`Hello Vostok`)
 
     const cementAchve = await axios.get("https://github.com/skbkontur/cement/releases/download/v1.0.58/63d70a890a8a69703c066965196021afb7a793c1.zip", { responseType: "arraybuffer" });
-    await fs.promises.writeFile("./cement.zip", cementAchve.data);
-    const cementZip = new admzip("./cement.zip");
-    cementZip.extractEntryTo("./.cement")
+    await fs.promises.writeFile("cement.zip", cementAchve.data);
+    const cementZip = new admzip("cement.zip");
+    cementZip.extractEntryTo(".")
     
     const projectsGlobber = await glob.create(['*/*.csproj', '!*.Tests/*.csproj'].join('\n'))
     const projects = await projectsGlobber.glob()

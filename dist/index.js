@@ -9769,9 +9769,9 @@ function run() {
         try {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Hello Vostok`);
             const cementAchve = yield axios.get("https://github.com/skbkontur/cement/releases/download/v1.0.58/63d70a890a8a69703c066965196021afb7a793c1.zip", { responseType: "arraybuffer" });
-            yield fs__WEBPACK_IMPORTED_MODULE_2__.promises.writeFile("./cement.zip", cementAchve.data);
-            const cementZip = new admzip("./cement.zip");
-            cementZip.extractEntryTo("./.cement");
+            yield fs__WEBPACK_IMPORTED_MODULE_2__.promises.writeFile("cement.zip", cementAchve.data);
+            const cementZip = new admzip("cement.zip");
+            cementZip.extractEntryTo(".");
             const projectsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(['*/*.csproj', '!*.Tests/*.csproj'].join('\n'));
             const projects = yield projectsGlobber.glob();
             console.log(projects);
