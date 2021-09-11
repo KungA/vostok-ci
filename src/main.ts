@@ -22,7 +22,7 @@ async function run(): Promise<void> {
     } else {
       await exec.exec("./install.cmd", [], {cwd: ".cement/dotnet"});
     }
-    core.addPath("/home/runner/bin")
+    core.addPath(`${os.homedir()}/bin`)
     await exec.exec("cm", ["--version"]);
 
     core.startGroup("Locate projects")

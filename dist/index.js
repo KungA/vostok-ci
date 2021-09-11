@@ -11085,7 +11085,7 @@ function run() {
             else {
                 yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.cmd", [], { cwd: ".cement/dotnet" });
             }
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath("/home/runner/bin");
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${os__WEBPACK_IMPORTED_MODULE_4__.homedir()}/bin`);
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["--version"]);
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Locate projects");
             const projectsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"));
