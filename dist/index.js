@@ -3047,7 +3047,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Hello Vostok`);
-            const projectsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(['*.csproj', '!*.Tests/*.csproj'].join('\n'));
+            const projectsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(['*/*.csproj'].join('\n'));
             const projects = yield projectsGlobber.glob();
             console.log(projects);
             const testsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(['*.Tests/*.csproj'].join('\n'));
