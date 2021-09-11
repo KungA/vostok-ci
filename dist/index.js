@@ -11078,7 +11078,7 @@ function run() {
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("chmod +x ./install.sh", [], { cwd: ".cement/dotnet" });
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.sh", [], { cwd: ".cement/dotnet" });
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath("~/bin");
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["--version"]);
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("$HOME/bin/cm", ["--version"]);
             const projectsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"));
             const projects = yield projectsGlobber.glob();
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected projects: ${projects}`);
