@@ -9767,17 +9767,18 @@ const admzip = __nccwpck_require__(6761);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Hello Vostok`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Downloading Cement..");
             const cementAchve = yield axios.get("https://github.com/skbkontur/cement/releases/download/v1.0.58/63d70a890a8a69703c066965196021afb7a793c1.zip", { responseType: "arraybuffer" });
             yield fs__WEBPACK_IMPORTED_MODULE_2__.promises.writeFile("cement.zip", cementAchve.data);
             const cementZip = new admzip("cement.zip");
             cementZip.extractAllTo(".cement");
-            const projectsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(['*/*.csproj', '!*.Tests/*.csproj'].join('\n'));
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info("Installing Cement..");
+            const projectsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"));
             const projects = yield projectsGlobber.glob();
-            console.log(projects);
-            const testsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(['*.Tests/*.csproj'].join('\n'));
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected projects: ${projects}`);
+            const testsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*.Tests/*.csproj"].join("\n"));
             const tests = yield testsGlobber.glob();
-            console.log(tests);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected tests: ${tests}`);
         }
         catch (error) {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
