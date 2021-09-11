@@ -14,7 +14,7 @@ async function run(): Promise<void> {
     cementZip.extractAllTo(".cement")
     
     core.info("Installing Cement..")
-    await exec.exec("install.sh", [], {cwd: ".cement/dotnet"});
+    await exec.exec("./install.sh", [], {cwd: ".cement/dotnet"});
     
     const projectsGlobber = await glob.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"))
     const projects = await projectsGlobber.glob()
