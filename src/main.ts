@@ -3,6 +3,7 @@ import * as glob from '@actions/glob'
 import * as exec from '@actions/exec'
 import * as github from '@actions/github'
 import * as fs from 'fs'
+import * as path from 'path'
 import * as os from 'os'
 const axios = require('axios');
 const admzip = require('adm-zip');
@@ -33,15 +34,11 @@ async function run(): Promise<void> {
     await exec.exec("cm", ["build-deps"]);
 
     core.startGroup("Locate projects")
-    const projectFoldersGlobber = await glob.create(["*", "!*.Tests"].join("\n"), {implicitDescendants: false})
-    const projectFolders = await projectFoldersGlobber.glob()
-    core.info(`Detected project folders: ${projectFolders}`)
     const projectFilesGlobber = await glob.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"))
     const projectFiles = await projectFilesGlobber.glob()
     core.info(`Detected project files: ${projectFiles}`)
-    const testFoldersGlobber = await glob.create(["*.Tests"].join("\n"), {implicitDescendants: false})
-    const testFolders = await testFoldersGlobber.glob()
-    core.info(`Detected test folders: ${testFolders}`)
+    const projectFolders = projectFiles.map(f => path.dirname(f))
+    core.info(`Detected project folders: ${projectFolders}`)    
     const testFilesGlobber = await glob.create(["*.Tests/*.csproj"].join("\n"))
     const testFiles = await testFilesGlobber.glob()
     core.info(`Detected test files: ${testFiles}`)

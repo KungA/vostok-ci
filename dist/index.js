@@ -11051,8 +11051,10 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_exec__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_actions_exec__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(5747);
 /* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__nccwpck_require__.n(fs__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var os__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(2087);
-/* harmony import */ var os__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__nccwpck_require__.n(os__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(5622);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__nccwpck_require__.n(path__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var os__WEBPACK_IMPORTED_MODULE_5__ = __nccwpck_require__(2087);
+/* harmony import */ var os__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__nccwpck_require__.n(os__WEBPACK_IMPORTED_MODULE_5__);
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -11062,6 +11064,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+
 
 
 
@@ -11078,14 +11081,14 @@ function run() {
             const cementZip = new admzip("cement.zip");
             cementZip.extractAllTo("cement-zip");
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Install Cement");
-            if (os__WEBPACK_IMPORTED_MODULE_4__.platform() !== 'win32') {
+            if (os__WEBPACK_IMPORTED_MODULE_5__.platform() !== 'win32') {
                 yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("chmod +x ./install.sh", [], { cwd: "cement-zip/dotnet" });
                 yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.sh", [], { cwd: "cement-zip/dotnet" });
             }
             else {
                 yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.cmd", [], { cwd: "cement-zip/dotnet" });
             }
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${os__WEBPACK_IMPORTED_MODULE_4__.homedir()}/bin`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${os__WEBPACK_IMPORTED_MODULE_5__.homedir()}/bin`);
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["--version"]);
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Download dependencies");
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["init"], { cwd: ".." });
@@ -11093,15 +11096,11 @@ function run() {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Build dependencies");
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["build-deps"]);
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Locate projects");
-            const projectFoldersGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*", "!*.Tests"].join("\n"), { implicitDescendants: false });
-            const projectFolders = yield projectFoldersGlobber.glob();
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected project folders: ${projectFolders}`);
             const projectFilesGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"));
             const projectFiles = yield projectFilesGlobber.glob();
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected project files: ${projectFiles}`);
-            const testFoldersGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*.Tests"].join("\n"), { implicitDescendants: false });
-            const testFolders = yield testFoldersGlobber.glob();
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected test folders: ${testFolders}`);
+            const projectFolders = projectFiles.map(f => path__WEBPACK_IMPORTED_MODULE_4__.dirname(f));
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected project folders: ${projectFolders}`);
             const testFilesGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*.Tests/*.csproj"].join("\n"));
             const testFiles = yield testFilesGlobber.glob();
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected test files: ${testFiles}`);
