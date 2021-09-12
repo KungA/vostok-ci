@@ -49,7 +49,7 @@ async function run(): Promise<void> {
     core.startGroup("Check ConfigureAwait(false)")
     await exec.exec("dotnet", ["build", "-c", "Release"], {cwd: "../vostok.devtools/configure-await-false"});
     await exec.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", "configureawaitfalse"], {cwd: "../vostok.devtools/configure-await-false"});
-    await exec.exec("configureawaitfalse", projects);
+    await exec.exec("configureawaitfalse", projectFolders);
     
   } catch (error) {
     core.setFailed(error.message)
