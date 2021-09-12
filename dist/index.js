@@ -11073,7 +11073,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Download Cement");
-            const cementAchve = yield axios.get("https://github.com/skbkontur/cement/releases/download/v1.0.58/63d70a890a8a69703c066965196021afb7a793c1.zip", { responseType: "arraybuffer" });
+            const cementAchve = yield axios.get("https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip", { responseType: "arraybuffer" });
             yield fs__WEBPACK_IMPORTED_MODULE_3__.promises.writeFile("cement.zip", cementAchve.data);
             const cementZip = new admzip("cement.zip");
             cementZip.extractAllTo("cement-zip");
@@ -11087,19 +11087,22 @@ function run() {
             }
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${os__WEBPACK_IMPORTED_MODULE_4__.homedir()}/bin`);
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["--version"]);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Download dependencies");
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["init"], { cwd: ".." });
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["update-deps"]);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Build dependencies");
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["build-deps"]);
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Locate projects");
             const projectsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"));
             const projects = yield projectsGlobber.glob();
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected projects: ${projects}`);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Download dependencies");
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["init"], { cwd: ".." });
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("ls", ["-la"], { cwd: ".." });
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["update-deps"]);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Build dependencies");
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["build-deps"]);
             const testsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*.Tests/*.csproj"].join("\n"));
             const tests = yield testsGlobber.glob();
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected tests: ${tests}`);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Check ConfigureAwait(false)");
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["build -c Release"], { cwd: "../vostok.devtools/configure-await-false" });
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["tool install --add-source nupkg -g configureawaitfalse"], { cwd: "../vostok.devtools/configure-await-false" });
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("configureawaitfalse", projects);
         }
         catch (error) {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);

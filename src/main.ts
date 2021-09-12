@@ -10,7 +10,7 @@ const admzip = require('adm-zip');
 async function run(): Promise<void> {
   try {
     core.startGroup("Download Cement")
-    const cementAchve = await axios.get("https://github.com/skbkontur/cement/releases/download/v1.0.58/63d70a890a8a69703c066965196021afb7a793c1.zip", { responseType: "arraybuffer" })
+    const cementAchve = await axios.get("https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip", { responseType: "arraybuffer" })
     await fs.promises.writeFile("cement.zip", cementAchve.data)
     const cementZip = new admzip("cement.zip")
     cementZip.extractAllTo("cement-zip")
@@ -25,22 +25,25 @@ async function run(): Promise<void> {
     core.addPath(`${os.homedir()}/bin`)
     await exec.exec("cm", ["--version"]);
 
-    core.startGroup("Locate projects")
-    const projectsGlobber = await glob.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"))
-    const projects = await projectsGlobber.glob()
-    core.info(`Detected projects: ${projects}`)
-
     core.startGroup("Download dependencies")
     await exec.exec("cm", ["init"], {cwd: ".."});
-    await exec.exec("ls", ["-la"], {cwd: ".."});
     await exec.exec("cm", ["update-deps"]);
 
     core.startGroup("Build dependencies")
     await exec.exec("cm", ["build-deps"]);
-    
+
+    core.startGroup("Locate projects")
+    const projectsGlobber = await glob.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"))
+    const projects = await projectsGlobber.glob()
+    core.info(`Detected projects: ${projects}`)
     const testsGlobber = await glob.create(["*.Tests/*.csproj"].join("\n"))
     const tests = await testsGlobber.glob()
     core.info(`Detected tests: ${tests}`)
+    
+    core.startGroup("Check ConfigureAwait(false)")
+    await exec.exec("dotnet", ["build -c Release"], {cwd: "../vostok.devtools/configure-await-false"});
+    await exec.exec("dotnet", ["tool install --add-source nupkg -g configureawaitfalse"], {cwd: "../vostok.devtools/configure-await-false"});
+    await exec.exec("configureawaitfalse", projects);
     
   } catch (error) {
     core.setFailed(error.message)
