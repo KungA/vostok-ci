@@ -11100,7 +11100,7 @@ function run() {
             const tests = yield testsGlobber.glob();
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected tests: ${tests}`);
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Check ConfigureAwait(false)");
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["build -c Release"], { cwd: "../vostok.devtools/configure-await-false" });
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["build", "-c", "Release"], { cwd: "../vostok.devtools/configure-await-false" });
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["tool install --add-source nupkg -g configureawaitfalse"], { cwd: "../vostok.devtools/configure-await-false" });
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("configureawaitfalse", projects);
         }
