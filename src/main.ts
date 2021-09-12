@@ -33,18 +33,18 @@ async function run(): Promise<void> {
     await exec.exec("cm", ["build-deps"]);
 
     core.startGroup("Locate projects")
-    const projectFoldersGlobber = await glob.create(["*", "!*.Tests"].join("\n"))
+    const projectFoldersGlobber = await glob.create(["*", "!*.Tests"].join("\n"), {implicitDescendants: false})
     const projectFolders = await projectFoldersGlobber.glob()
     core.info(`Detected project folders: ${projectFolders}`)
-    const projectsGlobber = await glob.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"))
-    const projects = await projectsGlobber.glob()
-    core.info(`Detected projects: ${projects}`)
-    const testFoldersGlobber = await glob.create(["*.Tests"].join("\n"))
+    const projectFilesGlobber = await glob.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"))
+    const projectFiles = await projectFilesGlobber.glob()
+    core.info(`Detected project files: ${projectFiles}`)
+    const testFoldersGlobber = await glob.create(["*.Tests"].join("\n"), {implicitDescendants: false})
     const testFolders = await testFoldersGlobber.glob()
     core.info(`Detected test folders: ${testFolders}`)
-    const testsGlobber = await glob.create(["*.Tests/*.csproj"].join("\n"))
-    const tests = await testsGlobber.glob()
-    core.info(`Detected tests: ${tests}`)
+    const testFilesGlobber = await glob.create(["*.Tests/*.csproj"].join("\n"))
+    const testFiles = await testFilesGlobber.glob()
+    core.info(`Detected test files: ${testFiles}`)
     
     core.startGroup("Check ConfigureAwait(false)")
     await exec.exec("dotnet", ["build", "-c", "Release"], {cwd: "../vostok.devtools/configure-await-false"});
