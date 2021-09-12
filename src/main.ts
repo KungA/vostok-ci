@@ -33,9 +33,15 @@ async function run(): Promise<void> {
     await exec.exec("cm", ["build-deps"]);
 
     core.startGroup("Locate projects")
+    const projectFoldersGlobber = await glob.create(["*", "!*.Tests"].join("\n"))
+    const projectFolders = await projectFoldersGlobber.glob()
+    core.info(`Detected project folders: ${projectFolders}`)
     const projectsGlobber = await glob.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"))
     const projects = await projectsGlobber.glob()
     core.info(`Detected projects: ${projects}`)
+    const testFoldersGlobber = await glob.create(["*.Tests"].join("\n"))
+    const testFolders = await testFoldersGlobber.glob()
+    core.info(`Detected test folders: ${testFolders}`)
     const testsGlobber = await glob.create(["*.Tests/*.csproj"].join("\n"))
     const tests = await testsGlobber.glob()
     core.info(`Detected tests: ${tests}`)

@@ -11093,9 +11093,15 @@ function run() {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Build dependencies");
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["build-deps"]);
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Locate projects");
+            const projectFoldersGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*", "!*.Tests"].join("\n"));
+            const projectFolders = yield projectFoldersGlobber.glob();
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected project folders: ${projectFolders}`);
             const projectsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"));
             const projects = yield projectsGlobber.glob();
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected projects: ${projects}`);
+            const testFoldersGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*.Tests"].join("\n"));
+            const testFolders = yield testFoldersGlobber.glob();
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected test folders: ${testFolders}`);
             const testsGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*.Tests/*.csproj"].join("\n"));
             const tests = yield testsGlobber.glob();
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected tests: ${tests}`);
