@@ -2,6 +2,7 @@ import * as core from '@actions/core'
 import * as glob from '@actions/glob'
 import * as exec from '@actions/exec'
 import * as tc from '@actions/tool-cache'
+import * as cache from '@actions/cache'
 import * as github from '@actions/github'
 import * as path from 'path'
 import * as os from 'os'
@@ -38,7 +39,9 @@ async function run(): Promise<void> {
     const testFilesGlobber = await glob.create(["*.Tests/*.csproj"].join("\n"))
     const testFiles = await testFilesGlobber.glob()
     core.info(`Detected test files: ${testFiles}`)
-    
+    const testFolders = testFiles.map(f => path.dirname(f))
+    core.info(`Detected test folders: ${testFolders}`)
+
     core.startGroup("Check ConfigureAwait(false)")
     await exec.exec("dotnet", ["build", "-c", "Release"], {cwd: "../vostok.devtools/configure-await-false"});
     await exec.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", "configureawaitfalse"], {cwd: "../vostok.devtools/configure-await-false"});
@@ -48,7 +51,9 @@ async function run(): Promise<void> {
     await exec.exec("dotnet", ["build", "-c", "Release"]);
 
     core.startGroup("Cache")
-    
+    const cacheKey = `${github.context.repo.repo.replace("/", ".")}-${os.platform()}-${github.context.runId}`
+    core.info(`Cache key: ${cacheKey}`)
+    await cache.saveCache(testFolders, cacheKey)
 
   } catch (error) {
     core.setFailed(error.message)
