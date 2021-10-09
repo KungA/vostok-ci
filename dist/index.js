@@ -11108,6 +11108,8 @@ function run() {
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["build", "-c", "Release"], { cwd: "../vostok.devtools/configure-await-false" });
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", "configureawaitfalse"], { cwd: "../vostok.devtools/configure-await-false" });
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("configureawaitfalse", projectFolders);
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Build");
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["build", "-c", "Release"]);
         }
         catch (error) {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
