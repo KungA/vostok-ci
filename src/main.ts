@@ -79,7 +79,7 @@ async function main(): Promise<void> {
       case "publish": await publish(); break;
     }
   } catch (error) {
-    core.setFailed(error.message)
+    core.setFailed(JSON.stringify(error))
   }
 }
 
