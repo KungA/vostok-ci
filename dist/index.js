@@ -60876,17 +60876,14 @@ function build() {
         const testsCacheKey = getTestsCacheKey();
         core.info(`Tests cache key: ${testsCacheKey}`);
         yield cache.saveCache(testFolders, testsCacheKey);
-        core.saveState("testFolders", testFolders);
-        core.saveState("testsCacheKey", testsCacheKey);
     });
 }
 function test() {
     return __awaiter(this, void 0, void 0, function* () {
         core.startGroup("Uncache");
-        const testsCacheKey = core.getState("testsCacheKey");
-        const testFolders = core.getState("testFolders");
+        const testsCacheKey = getTestsCacheKey();
         core.info(`Tests cache key: ${testsCacheKey}`);
-        //await cache.restoreCache(testFolders, testsCacheKey)
+        yield cache.restoreCache(["**"], testsCacheKey);
         core.startGroup("Test");
     });
 }
