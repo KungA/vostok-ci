@@ -63,7 +63,7 @@ async function test(): Promise<void> {
   await cache.restoreCache(["**"], testsCacheKey)
 
   core.startGroup("Test")
-  await exec.exec("dotnet", ["build", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework") ]);
+  await exec.exec("dotnet", ["build", "-c", "Release", "--logger GitHubActions", "--framework", core.getInput("framework") ]);
 }
 
 async function publish(): Promise<void> {
