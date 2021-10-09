@@ -60790,23 +60790,34 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
+// ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2186);
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _actions_glob__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(8090);
-/* harmony import */ var _actions_glob__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_glob__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _actions_exec__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(1514);
-/* harmony import */ var _actions_exec__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_actions_exec__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(7784);
-/* harmony import */ var _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__nccwpck_require__.n(_actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _actions_cache__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(7799);
-/* harmony import */ var _actions_cache__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__nccwpck_require__.n(_actions_cache__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_5__ = __nccwpck_require__(5438);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6__ = __nccwpck_require__(5622);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__nccwpck_require__.n(path__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var os__WEBPACK_IMPORTED_MODULE_7__ = __nccwpck_require__(2087);
-/* harmony import */ var os__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__nccwpck_require__.n(os__WEBPACK_IMPORTED_MODULE_7__);
+
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var core = __nccwpck_require__(2186);
+// EXTERNAL MODULE: ./node_modules/@actions/glob/lib/glob.js
+var glob = __nccwpck_require__(8090);
+// EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
+var exec = __nccwpck_require__(1514);
+// EXTERNAL MODULE: ./node_modules/@actions/tool-cache/lib/tool-cache.js
+var tool_cache = __nccwpck_require__(7784);
+// EXTERNAL MODULE: ./node_modules/@actions/cache/lib/cache.js
+var cache = __nccwpck_require__(7799);
+// EXTERNAL MODULE: external "path"
+var external_path_ = __nccwpck_require__(5622);
+// EXTERNAL MODULE: external "os"
+var external_os_ = __nccwpck_require__(2087);
+var external_os_default = /*#__PURE__*/__nccwpck_require__.n(external_os_);
+// EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
+var github = __nccwpck_require__(5438);
+;// CONCATENATED MODULE: ./src/helpers.ts
+
+
+function getTestsCacheKey() {
+    return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${github.context.runId}`;
+}
+
+;// CONCATENATED MODULE: ./src/main.ts
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -60826,55 +60837,58 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 function build() {
     return __awaiter(this, void 0, void 0, function* () {
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Download Cement");
-        const cementArchive = yield _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip");
-        const cementZip = yield _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractZip(cementArchive, "cement-zip");
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Install Cement");
-        if (os__WEBPACK_IMPORTED_MODULE_7__.platform() !== 'win32') {
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("chmod +x ./install.sh", [], { cwd: `${cementZip}/dotnet` });
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.sh", [], { cwd: `${cementZip}/dotnet` });
+        core.startGroup("Download Cement");
+        const cementArchive = yield tool_cache.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip");
+        const cementZip = yield tool_cache.extractZip(cementArchive, "cement-zip");
+        core.startGroup("Install Cement");
+        if (external_os_.platform() !== 'win32') {
+            yield exec.exec("chmod +x ./install.sh", [], { cwd: `${cementZip}/dotnet` });
+            yield exec.exec("./install.sh", [], { cwd: `${cementZip}/dotnet` });
         }
         else {
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.cmd", [], { cwd: `${cementZip}/dotnet` });
+            yield exec.exec("./install.cmd", [], { cwd: `${cementZip}/dotnet` });
         }
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${os__WEBPACK_IMPORTED_MODULE_7__.homedir()}/bin`);
-        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["--version"]);
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Download dependencies");
-        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["init"], { cwd: ".." });
-        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["update-deps"]);
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Build dependencies");
-        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["build-deps"]);
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Locate projects");
-        const projectFilesGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"));
+        core.addPath(`${external_os_.homedir()}/bin`);
+        yield exec.exec("cm", ["--version"]);
+        core.startGroup("Download dependencies");
+        yield exec.exec("cm", ["init"], { cwd: ".." });
+        yield exec.exec("cm", ["update-deps"]);
+        core.startGroup("Build dependencies");
+        yield exec.exec("cm", ["build-deps"]);
+        core.startGroup("Locate projects");
+        const projectFilesGlobber = yield glob.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"));
         const projectFiles = yield projectFilesGlobber.glob();
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected project files: ${projectFiles}`);
-        const projectFolders = projectFiles.map(f => path__WEBPACK_IMPORTED_MODULE_6__.dirname(f));
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected project folders: ${projectFolders}`);
-        const testFilesGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*.Tests/*.csproj"].join("\n"));
+        core.info(`Detected project files: ${projectFiles}`);
+        const projectFolders = projectFiles.map(f => external_path_.dirname(f));
+        core.info(`Detected project folders: ${projectFolders}`);
+        const testFilesGlobber = yield glob.create(["*.Tests/*.csproj"].join("\n"));
         const testFiles = yield testFilesGlobber.glob();
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected test files: ${testFiles}`);
-        const testFolders = testFiles.map(f => path__WEBPACK_IMPORTED_MODULE_6__.dirname(f));
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected test folders: ${testFolders}`);
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Check ConfigureAwait(false)");
-        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["build", "-c", "Release"], { cwd: "../vostok.devtools/configure-await-false" });
-        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", "configureawaitfalse"], { cwd: "../vostok.devtools/configure-await-false" });
-        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("configureawaitfalse", projectFolders);
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Build");
-        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["build", "-c", "Release"]);
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Cache");
-        const cacheKey = `${_actions_github__WEBPACK_IMPORTED_MODULE_5__.context.repo.owner}.${_actions_github__WEBPACK_IMPORTED_MODULE_5__.context.repo.repo}-${os__WEBPACK_IMPORTED_MODULE_7__.platform()}-${_actions_github__WEBPACK_IMPORTED_MODULE_5__.context.runId}`;
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Cache key: ${cacheKey}`);
-        yield _actions_cache__WEBPACK_IMPORTED_MODULE_4__.saveCache(testFolders, cacheKey);
+        core.info(`Detected test files: ${testFiles}`);
+        const testFolders = testFiles.map(f => external_path_.dirname(f));
+        core.info(`Detected test folders: ${testFolders}`);
+        core.startGroup("Check ConfigureAwait(false)");
+        yield exec.exec("dotnet", ["build", "-c", "Release"], { cwd: "../vostok.devtools/configure-await-false" });
+        yield exec.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", "configureawaitfalse"], { cwd: "../vostok.devtools/configure-await-false" });
+        yield exec.exec("configureawaitfalse", projectFolders);
+        core.startGroup("Build");
+        yield exec.exec("dotnet", ["build", "-c", "Release"]);
+        core.startGroup("Cache");
+        const testsCacheKey = getTestsCacheKey();
+        core.info(`Tests cache key: ${testsCacheKey}`);
+        yield cache.saveCache(testFolders, testsCacheKey);
     });
 }
 function test() {
     return __awaiter(this, void 0, void 0, function* () {
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Uncache");
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Test");
+        core.startGroup("Uncache");
+        const testsCacheKey = getTestsCacheKey();
+        core.info(`Tests cache key: ${testsCacheKey}`);
+        yield cache.restoreCache(["*"], testsCacheKey);
+        core.startGroup("Test");
     });
 }
 try {
-    const type = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("type");
+    const type = core.getInput("type");
     switch (type) {
         case "build":
             build();
@@ -60885,7 +60899,7 @@ try {
     }
 }
 catch (error) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
+    core.setFailed(error.message);
 }
 
 })();

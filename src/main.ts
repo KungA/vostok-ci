@@ -3,9 +3,9 @@ import * as glob from '@actions/glob'
 import * as exec from '@actions/exec'
 import * as tc from '@actions/tool-cache'
 import * as cache from '@actions/cache'
-import * as github from '@actions/github'
 import * as path from 'path'
 import * as os from 'os'
+import {getTestsCacheKey} from "./helpers";
 
 async function build(): Promise<void> {
   core.startGroup("Download Cement")
@@ -50,13 +50,16 @@ async function build(): Promise<void> {
   await exec.exec("dotnet", ["build", "-c", "Release"]);
 
   core.startGroup("Cache")
-  const cacheKey = `${github.context.repo.owner}.${github.context.repo.repo}-${os.platform()}-${github.context.runId}`
-  core.info(`Cache key: ${cacheKey}`)
-  await cache.saveCache(testFolders, cacheKey)
+  const testsCacheKey = getTestsCacheKey()
+  core.info(`Tests cache key: ${testsCacheKey}`)
+  await cache.saveCache(testFolders, testsCacheKey)
 }
 
 async function test(): Promise<void> {
   core.startGroup("Uncache")
+  const testsCacheKey = getTestsCacheKey()
+  core.info(`Tests cache key: ${testsCacheKey}`)
+  await cache.restoreCache(["*"], testsCacheKey)
   
   core.startGroup("Test")
 }
