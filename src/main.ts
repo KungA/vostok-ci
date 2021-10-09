@@ -51,7 +51,7 @@ async function run(): Promise<void> {
     await exec.exec("dotnet", ["build", "-c", "Release"]);
 
     core.startGroup("Cache")
-    const cacheKey = `${github.context.repo.repo.replace("/", ".")}-${os.platform()}-${github.context.runId}`
+    const cacheKey = `${github.context.repo.owner}.${github.context.repo.repo}-${os.platform()}-${github.context.runId}`
     core.info(`Cache key: ${cacheKey}`)
     await cache.saveCache(testFolders, cacheKey)
 

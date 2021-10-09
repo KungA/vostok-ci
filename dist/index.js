@@ -60863,7 +60863,7 @@ function run() {
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Build");
             yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["build", "-c", "Release"]);
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Cache");
-            const cacheKey = `${_actions_github__WEBPACK_IMPORTED_MODULE_5__.context.repo.repo.replace("/", ".")}-${os__WEBPACK_IMPORTED_MODULE_7__.platform()}-${_actions_github__WEBPACK_IMPORTED_MODULE_5__.context.runId}`;
+            const cacheKey = `${_actions_github__WEBPACK_IMPORTED_MODULE_5__.context.repo.owner}.${_actions_github__WEBPACK_IMPORTED_MODULE_5__.context.repo.repo}-${os__WEBPACK_IMPORTED_MODULE_7__.platform()}-${_actions_github__WEBPACK_IMPORTED_MODULE_5__.context.runId}`;
             _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Cache key: ${cacheKey}`);
             yield _actions_cache__WEBPACK_IMPORTED_MODULE_4__.saveCache(testFolders, cacheKey);
         }
