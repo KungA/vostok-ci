@@ -60883,8 +60883,9 @@ function test() {
         core.startGroup("Uncache");
         const testsCacheKey = getTestsCacheKey();
         core.info(`Tests cache key: ${testsCacheKey}`);
-        const cacheResult = yield cache.restoreCache(["**"], testsCacheKey);
+        yield cache.restoreCache(["**"], testsCacheKey);
         core.startGroup("Test");
+        yield exec.exec("dotnet", ["build", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework")]);
     });
 }
 try {

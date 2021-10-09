@@ -60,9 +60,10 @@ async function test(): Promise<void> {
   core.startGroup("Uncache")
   const testsCacheKey = getTestsCacheKey()
   core.info(`Tests cache key: ${testsCacheKey}`)
-  const cacheResult = await cache.restoreCache(["**"], testsCacheKey)
-  
+  await cache.restoreCache(["**"], testsCacheKey)
+
   core.startGroup("Test")
+  await exec.exec("dotnet", ["build", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework") ]);
 }
 
 try {

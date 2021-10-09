@@ -8,3 +8,6 @@ inputs:
   type:
     description: 'Action type'
     required: true
+  framework:
+    description: 'Test framework'
+    required: false
