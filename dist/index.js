@@ -60888,6 +60888,11 @@ function test() {
         yield exec.exec("dotnet", ["build", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework")]);
     });
 }
+function publish() {
+    return __awaiter(this, void 0, void 0, function* () {
+        core.startGroup("Publish");
+    });
+}
 try {
     const type = core.getInput("type");
     switch (type) {
@@ -60896,6 +60901,9 @@ try {
             break;
         case "test":
             test();
+            break;
+        case "publish":
+            publish();
             break;
     }
 }

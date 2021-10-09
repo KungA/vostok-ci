@@ -66,11 +66,16 @@ async function test(): Promise<void> {
   await exec.exec("dotnet", ["build", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework") ]);
 }
 
+async function publish(): Promise<void> {
+  core.startGroup("Publish")
+}
+
 try {
   const type = core.getInput("type");
   switch (type) {
     case "build": build(); break; 
-    case "test": test(); break; 
+    case "test": test(); break;
+    case "publish": publish(); break;
   }
 } catch (error) {
   core.setFailed(error.message)
