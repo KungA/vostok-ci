@@ -60824,55 +60824,69 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 
 
-function run() {
+function build() {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Download Cement");
-            const cementArchive = yield _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip");
-            const cementZip = yield _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractZip(cementArchive, "cement-zip");
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Install Cement");
-            if (os__WEBPACK_IMPORTED_MODULE_7__.platform() !== 'win32') {
-                yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("chmod +x ./install.sh", [], { cwd: `${cementZip}/dotnet` });
-                yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.sh", [], { cwd: `${cementZip}/dotnet` });
-            }
-            else {
-                yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.cmd", [], { cwd: `${cementZip}/dotnet` });
-            }
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${os__WEBPACK_IMPORTED_MODULE_7__.homedir()}/bin`);
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["--version"]);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Download dependencies");
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["init"], { cwd: ".." });
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["update-deps"]);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Build dependencies");
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["build-deps"]);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Locate projects");
-            const projectFilesGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"));
-            const projectFiles = yield projectFilesGlobber.glob();
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected project files: ${projectFiles}`);
-            const projectFolders = projectFiles.map(f => path__WEBPACK_IMPORTED_MODULE_6__.dirname(f));
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected project folders: ${projectFolders}`);
-            const testFilesGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*.Tests/*.csproj"].join("\n"));
-            const testFiles = yield testFilesGlobber.glob();
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected test files: ${testFiles}`);
-            const testFolders = testFiles.map(f => path__WEBPACK_IMPORTED_MODULE_6__.dirname(f));
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected test folders: ${testFolders}`);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Check ConfigureAwait(false)");
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["build", "-c", "Release"], { cwd: "../vostok.devtools/configure-await-false" });
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", "configureawaitfalse"], { cwd: "../vostok.devtools/configure-await-false" });
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("configureawaitfalse", projectFolders);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Build");
-            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["build", "-c", "Release"]);
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Cache");
-            const cacheKey = `${_actions_github__WEBPACK_IMPORTED_MODULE_5__.context.repo.owner}.${_actions_github__WEBPACK_IMPORTED_MODULE_5__.context.repo.repo}-${os__WEBPACK_IMPORTED_MODULE_7__.platform()}-${_actions_github__WEBPACK_IMPORTED_MODULE_5__.context.runId}`;
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Cache key: ${cacheKey}`);
-            yield _actions_cache__WEBPACK_IMPORTED_MODULE_4__.saveCache(testFolders, cacheKey);
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Download Cement");
+        const cementArchive = yield _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip");
+        const cementZip = yield _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.extractZip(cementArchive, "cement-zip");
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Install Cement");
+        if (os__WEBPACK_IMPORTED_MODULE_7__.platform() !== 'win32') {
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("chmod +x ./install.sh", [], { cwd: `${cementZip}/dotnet` });
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.sh", [], { cwd: `${cementZip}/dotnet` });
         }
-        catch (error) {
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
+        else {
+            yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("./install.cmd", [], { cwd: `${cementZip}/dotnet` });
         }
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(`${os__WEBPACK_IMPORTED_MODULE_7__.homedir()}/bin`);
+        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["--version"]);
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Download dependencies");
+        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["init"], { cwd: ".." });
+        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["update-deps"]);
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Build dependencies");
+        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("cm", ["build-deps"]);
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Locate projects");
+        const projectFilesGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"));
+        const projectFiles = yield projectFilesGlobber.glob();
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected project files: ${projectFiles}`);
+        const projectFolders = projectFiles.map(f => path__WEBPACK_IMPORTED_MODULE_6__.dirname(f));
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected project folders: ${projectFolders}`);
+        const testFilesGlobber = yield _actions_glob__WEBPACK_IMPORTED_MODULE_1__.create(["*.Tests/*.csproj"].join("\n"));
+        const testFiles = yield testFilesGlobber.glob();
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected test files: ${testFiles}`);
+        const testFolders = testFiles.map(f => path__WEBPACK_IMPORTED_MODULE_6__.dirname(f));
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Detected test folders: ${testFolders}`);
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Check ConfigureAwait(false)");
+        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["build", "-c", "Release"], { cwd: "../vostok.devtools/configure-await-false" });
+        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", "configureawaitfalse"], { cwd: "../vostok.devtools/configure-await-false" });
+        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("configureawaitfalse", projectFolders);
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Build");
+        yield _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec("dotnet", ["build", "-c", "Release"]);
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Cache");
+        const cacheKey = `${_actions_github__WEBPACK_IMPORTED_MODULE_5__.context.repo.owner}.${_actions_github__WEBPACK_IMPORTED_MODULE_5__.context.repo.repo}-${os__WEBPACK_IMPORTED_MODULE_7__.platform()}-${_actions_github__WEBPACK_IMPORTED_MODULE_5__.context.runId}`;
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Cache key: ${cacheKey}`);
+        yield _actions_cache__WEBPACK_IMPORTED_MODULE_4__.saveCache(testFolders, cacheKey);
     });
 }
-run();
+function test() {
+    return __awaiter(this, void 0, void 0, function* () {
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Uncache");
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.startGroup("Test");
+    });
+}
+try {
+    const type = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("type");
+    switch (type) {
+        case "build":
+            build();
+            break;
+        case "test":
+            test();
+            break;
+    }
+}
+catch (error) {
+    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
+}
 
 })();
 
