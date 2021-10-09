@@ -1,4 +1,5 @@
 import * as core from '@actions/core'
+import * as github from "@actions/github";
 import * as glob from '@actions/glob'
 import * as exec from '@actions/exec'
 import * as tc from '@actions/tool-cache'
@@ -52,14 +53,14 @@ async function build(): Promise<void> {
   core.startGroup("Cache")
   const testsCacheKey = getTestsCacheKey()
   core.info(`Tests cache key: ${testsCacheKey}`)
-  await cache.saveCache(["!*.Tests"], testsCacheKey)
+  await cache.saveCache(["./"], testsCacheKey)
 }
 
 async function test(): Promise<void> {
   core.startGroup("Uncache")
   const testsCacheKey = getTestsCacheKey()
   core.info(`Tests cache key: ${testsCacheKey}`)
-  const cacheResult = await cache.restoreCache(["!*.Tests"], testsCacheKey)
+  const cacheResult = await cache.restoreCache(["./"], testsCacheKey)
   
   core.startGroup("Test")
 }
