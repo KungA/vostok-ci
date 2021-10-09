@@ -60875,7 +60875,7 @@ function build() {
         core.startGroup("Cache");
         const testsCacheKey = getTestsCacheKey();
         core.info(`Tests cache key: ${testsCacheKey}`);
-        yield cache.saveCache(testFolders, testsCacheKey);
+        yield cache.saveCache(["!*.Tests"], testsCacheKey);
     });
 }
 function test() {
@@ -60883,7 +60883,7 @@ function test() {
         core.startGroup("Uncache");
         const testsCacheKey = getTestsCacheKey();
         core.info(`Tests cache key: ${testsCacheKey}`);
-        yield cache.restoreCache(["**"], testsCacheKey);
+        const cacheResult = yield cache.restoreCache(["!*.Tests"], testsCacheKey);
         core.startGroup("Test");
     });
 }

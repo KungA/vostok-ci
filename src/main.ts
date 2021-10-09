@@ -52,14 +52,14 @@ async function build(): Promise<void> {
   core.startGroup("Cache")
   const testsCacheKey = getTestsCacheKey()
   core.info(`Tests cache key: ${testsCacheKey}`)
-  await cache.saveCache(testFolders, testsCacheKey)
+  await cache.saveCache(["!*.Tests"], testsCacheKey)
 }
 
 async function test(): Promise<void> {
   core.startGroup("Uncache")
   const testsCacheKey = getTestsCacheKey()
   core.info(`Tests cache key: ${testsCacheKey}`)
-  await cache.restoreCache(["**"], testsCacheKey)
+  const cacheResult = await cache.restoreCache(["!*.Tests"], testsCacheKey)
   
   core.startGroup("Test")
 }
