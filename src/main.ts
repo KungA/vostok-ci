@@ -70,13 +70,17 @@ async function publish(): Promise<void> {
   core.startGroup("Publish")
 }
 
-try {
-  const type = core.getInput("type");
-  switch (type) {
-    case "build": build(); break; 
-    case "test": test(); break;
-    case "publish": publish(); break;
+async function main(): Promise<void> {
+  try {
+    const type = core.getInput("type");
+    switch (type) {
+      case "build": await build(); break;
+      case "test": await test(); break;
+      case "publish": await publish(); break;
+    }
+  } catch (error) {
+    core.setFailed(error.message)
   }
-} catch (error) {
-  core.setFailed(error.message)
 }
+
+main()

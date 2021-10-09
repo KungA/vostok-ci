@@ -60893,23 +60893,28 @@ function publish() {
         core.startGroup("Publish");
     });
 }
-try {
-    const type = core.getInput("type");
-    switch (type) {
-        case "build":
-            build();
-            break;
-        case "test":
-            test();
-            break;
-        case "publish":
-            publish();
-            break;
-    }
+function main() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const type = core.getInput("type");
+            switch (type) {
+                case "build":
+                    yield build();
+                    break;
+                case "test":
+                    yield test();
+                    break;
+                case "publish":
+                    yield publish();
+                    break;
+            }
+        }
+        catch (error) {
+            core.setFailed(error.message);
+        }
+    });
 }
-catch (error) {
-    core.setFailed(error.message);
-}
+main();
 
 })();
 
