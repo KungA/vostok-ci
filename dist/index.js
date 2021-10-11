@@ -60936,7 +60936,7 @@ var github = __nccwpck_require__(5438);
 
 
 function getTestsCacheKey() {
-    return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${github.context.runId}`;
+    return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`;
 }
 
 ;// CONCATENATED MODULE: ./src/main.ts
