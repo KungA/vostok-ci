@@ -61007,7 +61007,7 @@ function test() {
         core.info(`Tests cache key: ${testsCacheKey}`);
         yield cache.restoreCache(["**"], testsCacheKey);
         core.startGroup("Test");
-        yield exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework")]);
+        yield exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"]);
     });
 }
 function publish() {
