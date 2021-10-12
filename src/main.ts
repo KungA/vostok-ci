@@ -6,7 +6,7 @@ import * as tc from '@actions/tool-cache'
 import * as cache from '@actions/cache'
 import * as path from 'path'
 import * as os from 'os'
-import {getTestsCacheKey} from "./helpers";
+import {getTestsCacheKey, getTestsCachePaths} from "./helpers";
 
 async function build(): Promise<void> {
   core.startGroup("Download Cement")
@@ -53,14 +53,14 @@ async function build(): Promise<void> {
   core.startGroup("Cache")
   const testsCacheKey = getTestsCacheKey()
   core.info(`Tests cache key: ${testsCacheKey}`)
-  await cache.saveCache(["**"], testsCacheKey)
+  await cache.saveCache(getTestsCachePaths(), testsCacheKey)
 }
 
 async function test(): Promise<void> {
   core.startGroup("Uncache")
   const testsCacheKey = getTestsCacheKey()
   core.info(`Tests cache key: ${testsCacheKey}`)
-  await cache.restoreCache(["**"], testsCacheKey)
+  await cache.restoreCache(getTestsCachePaths(), testsCacheKey)
 
   core.startGroup("Test")
   await exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"]);

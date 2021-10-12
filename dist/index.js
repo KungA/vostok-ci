@@ -60938,6 +60938,9 @@ var github = __nccwpck_require__(5438);
 function getTestsCacheKey() {
     return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`;
 }
+function getTestsCachePaths() {
+    return ["**", "../vostok.devtools/**"];
+}
 
 ;// CONCATENATED MODULE: ./src/main.ts
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -60997,7 +61000,7 @@ function build() {
         core.startGroup("Cache");
         const testsCacheKey = getTestsCacheKey();
         core.info(`Tests cache key: ${testsCacheKey}`);
-        yield cache.saveCache(["**"], testsCacheKey);
+        yield cache.saveCache(getTestsCachePaths(), testsCacheKey);
     });
 }
 function test() {
@@ -61005,7 +61008,7 @@ function test() {
         core.startGroup("Uncache");
         const testsCacheKey = getTestsCacheKey();
         core.info(`Tests cache key: ${testsCacheKey}`);
-        yield cache.restoreCache(["**"], testsCacheKey);
+        yield cache.restoreCache(getTestsCachePaths(), testsCacheKey);
         core.startGroup("Test");
         yield exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"]);
     });
