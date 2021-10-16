@@ -60863,35 +60863,6 @@ module.exports = require("zlib");
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__nccwpck_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__nccwpck_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__nccwpck_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -60929,15 +60900,13 @@ var cache = __nccwpck_require__(7799);
 var external_path_ = __nccwpck_require__(5622);
 // EXTERNAL MODULE: external "os"
 var external_os_ = __nccwpck_require__(2087);
-var external_os_default = /*#__PURE__*/__nccwpck_require__.n(external_os_);
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __nccwpck_require__(5438);
 ;// CONCATENATED MODULE: ./src/helpers.ts
 
 
-
 function getTestsCacheKey() {
-    return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`;
+    return `${github.context.repo.owner}.${github.context.repo.repo}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`;
 }
 function getTestsCachePaths() {
     return ["**", external_path_.resolve("../vostok.devtools/")];
@@ -60998,11 +60967,15 @@ function build() {
         yield exec.exec("configureawaitfalse", projectFolders);
         core.startGroup("Build");
         yield exec.exec("dotnet", ["build", "-c", "Release"]);
-        core.startGroup("Cache");
-        const testsCacheKey = getTestsCacheKey();
-        const testsCachePaths = getTestsCachePaths();
-        core.info(`Caching: ${testsCachePaths} with key = ${testsCacheKey}`);
-        yield cache.saveCache(testsCachePaths, testsCacheKey);
+        if (external_os_.platform() === "win32") {
+            core.startGroup("Cache");
+            const testsCacheKey = getTestsCacheKey();
+            const testsCachePaths = getTestsCachePaths();
+            core.info(`Caching: ${testsCachePaths} with key = ${testsCacheKey}`);
+            yield cache.saveCache(testsCachePaths, testsCacheKey);
+        }
+        core.startGroup("Test");
+        yield exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", "netcoreapp3.1", "--no-build"]);
     });
 }
 function test() {
