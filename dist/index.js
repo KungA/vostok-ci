@@ -60935,11 +60935,12 @@ var github = __nccwpck_require__(5438);
 ;// CONCATENATED MODULE: ./src/helpers.ts
 
 
+
 function getTestsCacheKey() {
     return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`;
 }
 function getTestsCachePaths() {
-    return ["**", "../vostok.devtools/"];
+    return ["**", external_path_.resolve("../vostok.devtools/")];
 }
 
 ;// CONCATENATED MODULE: ./src/main.ts
