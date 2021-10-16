@@ -60939,7 +60939,7 @@ function getTestsCacheKey() {
     return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`;
 }
 function getTestsCachePaths() {
-    return ["**", "../vostok.devtools/**"];
+    return ["**", "../vostok.devtools/"];
 }
 
 ;// CONCATENATED MODULE: ./src/main.ts
@@ -60999,16 +60999,18 @@ function build() {
         yield exec.exec("dotnet", ["build", "-c", "Release"]);
         core.startGroup("Cache");
         const testsCacheKey = getTestsCacheKey();
-        core.info(`Tests cache key: ${testsCacheKey}`);
-        yield cache.saveCache(getTestsCachePaths(), testsCacheKey);
+        const testsCachePaths = getTestsCachePaths();
+        core.info(`Caching: ${testsCachePaths} with key = ${testsCacheKey}`);
+        yield cache.saveCache(testsCachePaths, testsCacheKey);
     });
 }
 function test() {
     return __awaiter(this, void 0, void 0, function* () {
         core.startGroup("Uncache");
         const testsCacheKey = getTestsCacheKey();
-        core.info(`Tests cache key: ${testsCacheKey}`);
-        yield cache.restoreCache(getTestsCachePaths(), testsCacheKey);
+        const testsCachePaths = getTestsCachePaths();
+        core.info(`Uncaching: ${testsCachePaths} with key = ${testsCacheKey}`);
+        yield cache.restoreCache(testsCachePaths, testsCacheKey);
         core.startGroup("Test");
         yield exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"]);
     });

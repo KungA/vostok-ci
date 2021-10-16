@@ -6,5 +6,5 @@ export function getTestsCacheKey() {
 }
 
 export function getTestsCachePaths() {
-    return ["**", "../vostok.devtools/**"];
+    return ["**", "../vostok.devtools/"];
 }

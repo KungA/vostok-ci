@@ -52,15 +52,17 @@ async function build(): Promise<void> {
 
   core.startGroup("Cache")
   const testsCacheKey = getTestsCacheKey()
-  core.info(`Tests cache key: ${testsCacheKey}`)
-  await cache.saveCache(getTestsCachePaths(), testsCacheKey)
+  const testsCachePaths = getTestsCachePaths();
+  core.info(`Caching: ${testsCachePaths} with key = ${testsCacheKey}`)
+  await cache.saveCache(testsCachePaths, testsCacheKey)
 }
 
 async function test(): Promise<void> {
   core.startGroup("Uncache")
   const testsCacheKey = getTestsCacheKey()
-  core.info(`Tests cache key: ${testsCacheKey}`)
-  await cache.restoreCache(getTestsCachePaths(), testsCacheKey)
+  const testsCachePaths = getTestsCachePaths();
+  core.info(`Uncaching: ${testsCachePaths} with key = ${testsCacheKey}`)
+  await cache.restoreCache(testsCachePaths, testsCacheKey)
 
   core.startGroup("Test")
   await exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"]);
