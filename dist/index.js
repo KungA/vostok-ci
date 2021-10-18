@@ -61039,7 +61039,10 @@ function test() {
         core.startGroup("Restore");
         yield exec.exec("dotnet", ["restore"], { cwd: moduleFolder });
         core.startGroup("Test");
-        yield exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"], { cwd: moduleFolder });
+        yield exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"], { cwd: moduleFolder, listeners: { stdline: line => {
+                    if (line.indexOf("Total:   ") != -1)
+                        core.notice(line);
+                } } });
     });
 }
 function publish() {
