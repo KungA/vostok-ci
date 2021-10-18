@@ -28,14 +28,6 @@ async function build(): Promise<void> {
   await exec.exec("cm", ["init"]);
   await exec.exec("cm", ["update-deps"], {cwd: moduleFolder});
 
-  if (core.getInput("references") == "cement") {
-    core.startGroup("Build dependencies")
-    await exec.exec("cm", ["build-deps"], {cwd: moduleFolder});
-  } else {
-    core.startGroup("Replace cement references")
-    await execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json"])
-  }
-
   core.startGroup("Locate projects")
   const projectFilesGlobber = await glob.create([`${moduleFolder}/*/*.csproj`, `!${moduleFolder}/*.Tests/*.csproj`].join("\n"))
   const projectFiles = await projectFilesGlobber.glob()
@@ -51,6 +43,14 @@ async function build(): Promise<void> {
   core.startGroup("Check ConfigureAwait(false)")
   await execTool("configure-await-false", projectFolders);
 
+  if (core.getInput("references") == "cement") {
+    core.startGroup("Build dependencies")
+    await exec.exec("cm", ["build-deps"], {cwd: moduleFolder});
+  } else {
+    core.startGroup("Replace cement references")
+    await execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json"], {cwd: moduleFolder})
+  }
+  
   core.startGroup("Build")
   await exec.exec("dotnet", ["build", "-c", "Release"], {cwd: moduleFolder});
 

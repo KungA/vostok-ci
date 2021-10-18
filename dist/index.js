@@ -60999,14 +60999,6 @@ function build() {
         core.startGroup("Download dependencies");
         yield exec.exec("cm", ["init"]);
         yield exec.exec("cm", ["update-deps"], { cwd: moduleFolder });
-        if (core.getInput("references") == "cement") {
-            core.startGroup("Build dependencies");
-            yield exec.exec("cm", ["build-deps"], { cwd: moduleFolder });
-        }
-        else {
-            core.startGroup("Replace cement references");
-            yield execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json"]);
-        }
         core.startGroup("Locate projects");
         const projectFilesGlobber = yield glob.create([`${moduleFolder}/*/*.csproj`, `!${moduleFolder}/*.Tests/*.csproj`].join("\n"));
         const projectFiles = yield projectFilesGlobber.glob();
@@ -61020,6 +61012,14 @@ function build() {
         core.info(`Detected test folders: ${testFolders}`);
         core.startGroup("Check ConfigureAwait(false)");
         yield execTool("configure-await-false", projectFolders);
+        if (core.getInput("references") == "cement") {
+            core.startGroup("Build dependencies");
+            yield exec.exec("cm", ["build-deps"], { cwd: moduleFolder });
+        }
+        else {
+            core.startGroup("Replace cement references");
+            yield execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json"], { cwd: moduleFolder });
+        }
         core.startGroup("Build");
         yield exec.exec("dotnet", ["build", "-c", "Release"], { cwd: moduleFolder });
         core.startGroup("Cache");
