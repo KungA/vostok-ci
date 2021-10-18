@@ -60954,7 +60954,7 @@ function getTestsCachePaths() {
 }
 function execTool(tool, args, options) {
     return __awaiter(this, void 0, void 0, function* () {
-        const toolName = tool.replace("-", "");
+        const toolName = tool.replace(/-/g, "");
         yield exec.exec("dotnet", ["build", "-c", "Release"], { cwd: `vostok.devtools/${tool}` });
         yield exec.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", toolName], { cwd: `vostok.devtools/${tool}` });
         yield exec.exec(toolName, args, options);

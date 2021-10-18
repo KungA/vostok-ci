@@ -15,7 +15,7 @@ export function getTestsCachePaths() {
 }
 
 export async function execTool(tool: string, args?: string[], options?: ExecOptions): Promise<void> {
-    const toolName = tool.replace("-", "");
+    const toolName = tool.replace(/-/g, "");
     await exec.exec("dotnet", ["build", "-c", "Release"], {cwd: `vostok.devtools/${tool}`});
     await exec.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", toolName], {cwd: `vostok.devtools/${tool}`});
     await exec.exec(toolName, args, options);
