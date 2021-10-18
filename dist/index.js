@@ -60951,7 +60951,7 @@ function build() {
         core.startGroup("Build dependencies");
         yield exec.exec("cm", ["build-deps"], { cwd: moduleFolder });
         core.startGroup("Locate projects");
-        const projectFilesGlobber = yield glob.create([`${moduleFolder}/*/*.csproj`, `${moduleFolder}/!*.Tests/*.csproj`].join("\n"));
+        const projectFilesGlobber = yield glob.create([`${moduleFolder}/*/*.csproj`, `!${moduleFolder}/*.Tests/*.csproj`].join("\n"));
         const projectFiles = yield projectFilesGlobber.glob();
         core.info(`Detected project files: ${projectFiles}`);
         const projectFolders = projectFiles.map(f => external_path_.dirname(f));

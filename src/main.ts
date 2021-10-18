@@ -33,7 +33,7 @@ async function build(): Promise<void> {
   await exec.exec("cm", ["build-deps"], {cwd: moduleFolder});
 
   core.startGroup("Locate projects")
-  const projectFilesGlobber = await glob.create([`${moduleFolder}/*/*.csproj`, `${moduleFolder}/!*.Tests/*.csproj`].join("\n"))
+  const projectFilesGlobber = await glob.create([`${moduleFolder}/*/*.csproj`, `!${moduleFolder}/*.Tests/*.csproj`].join("\n"))
   const projectFiles = await projectFilesGlobber.glob()
   core.info(`Detected project files: ${projectFiles}`)
   const projectFolders = projectFiles.map(f => path.dirname(f))
