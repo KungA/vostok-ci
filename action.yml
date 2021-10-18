@@ -11,3 +11,6 @@ inputs:
   framework:
     description: 'Test framework'
     required: false
+  references:
+    description: 'References type'
+    required: false
