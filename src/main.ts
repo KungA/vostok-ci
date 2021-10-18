@@ -52,16 +52,11 @@ async function build(): Promise<void> {
   core.startGroup("Build")
   await exec.exec("dotnet", ["build", "-c", "Release"], {cwd: moduleFolder});
 
-  if (os.platform() === "win32") {
-    core.startGroup("Cache")
-    const testsCacheKey = getTestsCacheKey()
-    const testsCachePaths = getTestsCachePaths();
-    core.info(`Caching: ${testsCachePaths} with key = ${testsCacheKey}`)
-    await cache.saveCache(testsCachePaths, testsCacheKey)
-  }
-
-  core.startGroup("Test")
-  await exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", "netcoreapp3.1", "--no-build"], {cwd: moduleFolder});
+  core.startGroup("Cache")
+  const testsCacheKey = getTestsCacheKey()
+  const testsCachePaths = getTestsCachePaths();
+  core.info(`Caching: ${testsCachePaths} with key = ${testsCacheKey}`)
+  await cache.saveCache(testsCachePaths, testsCacheKey)
 }
 
 async function test(): Promise<void> {
