@@ -61056,6 +61056,7 @@ function main() {
                 case "publish":
                     yield publish();
                     break;
+                default: core.setFailed(`Unknown '${job}' job.`);
             }
         }
         catch (error) {

@@ -84,6 +84,7 @@ async function main(): Promise<void> {
       case "build": await build(); break;
       case "test": await test(); break;
       case "publish": await publish(); break;
+      default: core.setFailed(`Unknown '${job}' job.`)
     }
   } catch (error) {
     core.setFailed(JSON.stringify(error))
