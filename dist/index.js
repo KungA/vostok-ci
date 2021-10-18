@@ -60933,6 +60933,16 @@ var external_os_default = /*#__PURE__*/__nccwpck_require__.n(external_os_);
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __nccwpck_require__(5438);
 ;// CONCATENATED MODULE: ./src/helpers.ts
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
 
 
 const moduleFolder = "vostok.module";
@@ -60942,9 +60952,17 @@ function getTestsCacheKey() {
 function getTestsCachePaths() {
     return [moduleFolder, "vostok.devtools/**/*.props"];
 }
+function execTool(tool, args, options) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const toolName = tool.replace("-", "");
+        yield exec.exec("dotnet", ["build", "-c", "Release"], { cwd: `vostok.devtools/${tool}` });
+        yield exec.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", toolName], { cwd: `vostok.devtools/${tool}` });
+        yield exec.exec(toolName, args, options);
+    });
+}
 
 ;// CONCATENATED MODULE: ./src/main.ts
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -60962,7 +60980,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 
 function build() {
-    return __awaiter(this, void 0, void 0, function* () {
+    return main_awaiter(this, void 0, void 0, function* () {
         core.startGroup("Download Cement");
         const cementArchive = yield tool_cache.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip");
         const cementZip = yield tool_cache.extractZip(cementArchive, "cement-zip");
@@ -60993,9 +61011,7 @@ function build() {
         const testFolders = testFiles.map(f => external_path_.dirname(f));
         core.info(`Detected test folders: ${testFolders}`);
         core.startGroup("Check ConfigureAwait(false)");
-        yield exec.exec("dotnet", ["build", "-c", "Release"], { cwd: "vostok.devtools/configure-await-false" });
-        yield exec.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", "configureawaitfalse"], { cwd: "vostok.devtools/configure-await-false" });
-        yield exec.exec("configureawaitfalse", projectFolders);
+        yield execTool("configure-await-false", projectFolders);
         core.startGroup("Build");
         yield exec.exec("dotnet", ["build", "-c", "Release"], { cwd: moduleFolder });
         core.startGroup("Cache");
@@ -61006,7 +61022,7 @@ function build() {
     });
 }
 function test() {
-    return __awaiter(this, void 0, void 0, function* () {
+    return main_awaiter(this, void 0, void 0, function* () {
         core.startGroup("Uncache");
         const testsCacheKey = getTestsCacheKey();
         const testsCachePaths = getTestsCachePaths();
@@ -61019,12 +61035,12 @@ function test() {
     });
 }
 function publish() {
-    return __awaiter(this, void 0, void 0, function* () {
+    return main_awaiter(this, void 0, void 0, function* () {
         core.startGroup("Publish");
     });
 }
 function main() {
-    return __awaiter(this, void 0, void 0, function* () {
+    return main_awaiter(this, void 0, void 0, function* () {
         try {
             const type = core.getInput("type");
             switch (type) {

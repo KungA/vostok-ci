@@ -6,7 +6,7 @@ import * as tc from '@actions/tool-cache'
 import * as cache from '@actions/cache'
 import * as path from 'path'
 import * as os from 'os'
-import {getTestsCacheKey, getTestsCachePaths, moduleFolder} from "./helpers";
+import {getTestsCacheKey, getTestsCachePaths, execTool, moduleFolder} from "./helpers";
 import {platform} from "os";
 
 async function build(): Promise<void> {
@@ -45,9 +45,7 @@ async function build(): Promise<void> {
   core.info(`Detected test folders: ${testFolders}`)
 
   core.startGroup("Check ConfigureAwait(false)")
-  await exec.exec("dotnet", ["build", "-c", "Release"], {cwd: "vostok.devtools/configure-await-false"});
-  await exec.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", "configureawaitfalse"], {cwd: "vostok.devtools/configure-await-false"});
-  await exec.exec("configureawaitfalse", projectFolders);
+  await execTool("configure-await-false", projectFolders);
 
   core.startGroup("Build")
   await exec.exec("dotnet", ["build", "-c", "Release"], {cwd: moduleFolder});
