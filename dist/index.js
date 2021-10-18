@@ -60940,7 +60940,7 @@ function getTestsCacheKey() {
     return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`;
 }
 function getTestsCachePaths() {
-    return [moduleFolder, "vostok.devtools"];
+    return [moduleFolder, "vostok.devtools/**/*.props"];
 }
 
 ;// CONCATENATED MODULE: ./src/main.ts

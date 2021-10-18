@@ -9,5 +9,5 @@ export function getTestsCacheKey() {
 }
 
 export function getTestsCachePaths() {
-    return [moduleFolder, "vostok.devtools"];
+    return [moduleFolder, "vostok.devtools/**/*.props"];
 }
