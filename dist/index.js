@@ -60985,9 +60985,8 @@ function test() {
         const testsCachePaths = getTestsCachePaths();
         core.info(`Uncaching: ${testsCachePaths} with key = ${testsCacheKey}`);
         yield cache.restoreCache(testsCachePaths, testsCacheKey);
-        const filesGlobber = yield glob.create([`${moduleFolder}`].join("\n"));
-        const files = yield filesGlobber.glob();
-        core.info(`Detected files: ${files}`);
+        core.startGroup("Restore");
+        yield exec.exec("dotnet", ["restore"], { cwd: moduleFolder });
         core.startGroup("Test");
         yield exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"], { cwd: moduleFolder });
     });

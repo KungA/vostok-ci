@@ -71,9 +71,8 @@ async function test(): Promise<void> {
   core.info(`Uncaching: ${testsCachePaths} with key = ${testsCacheKey}`)
   await cache.restoreCache(testsCachePaths, testsCacheKey)
 
-  const filesGlobber = await glob.create([`${moduleFolder}`].join("\n"))
-  const files = await filesGlobber.glob()
-  core.info(`Detected files: ${files}`)
+  core.startGroup("Restore")
+  await exec.exec("dotnet", ["restore"], {cwd: moduleFolder});
   
   core.startGroup("Test")
   await exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"], {cwd: moduleFolder});
