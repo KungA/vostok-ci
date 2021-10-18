@@ -61004,6 +61004,8 @@ function build() {
             yield exec.exec("cm", ["build-deps"], { cwd: moduleFolder });
         }
         else {
+            core.startGroup("Replace cement references");
+            yield execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json"]);
         }
         core.startGroup("Locate projects");
         const projectFilesGlobber = yield glob.create([`${moduleFolder}/*/*.csproj`, `!${moduleFolder}/*.Tests/*.csproj`].join("\n"));
