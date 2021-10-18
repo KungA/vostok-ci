@@ -60904,12 +60904,12 @@ var external_os_ = __nccwpck_require__(2087);
 var github = __nccwpck_require__(5438);
 ;// CONCATENATED MODULE: ./src/helpers.ts
 
-
+const moduleFolder = "vostok.module";
 function getTestsCacheKey() {
     return `${github.context.repo.owner}.${github.context.repo.repo}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`;
 }
 function getTestsCachePaths() {
-    return [`${github.context.repo.repo}/`, external_path_.resolve("vostok.devtools/")];
+    return [moduleFolder, "vostok.devtools"];
 }
 
 ;// CONCATENATED MODULE: ./src/main.ts
@@ -60932,7 +60932,6 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 function build() {
     return __awaiter(this, void 0, void 0, function* () {
-        const moduleFolder = "vostok.module";
         core.startGroup("Download Cement");
         const cementArchive = yield tool_cache.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip");
         const cementZip = yield tool_cache.extractZip(cementArchive, "cement-zip");
@@ -60957,17 +60956,17 @@ function build() {
         core.info(`Detected project files: ${projectFiles}`);
         const projectFolders = projectFiles.map(f => external_path_.dirname(f));
         core.info(`Detected project folders: ${projectFolders}`);
-        const testFilesGlobber = yield glob.create(["*.Tests/*.csproj"].join("\n"));
+        const testFilesGlobber = yield glob.create([`${moduleFolder}/*.Tests/*.csproj`].join("\n"));
         const testFiles = yield testFilesGlobber.glob();
         core.info(`Detected test files: ${testFiles}`);
         const testFolders = testFiles.map(f => external_path_.dirname(f));
         core.info(`Detected test folders: ${testFolders}`);
         core.startGroup("Check ConfigureAwait(false)");
-        yield exec.exec("dotnet", ["build", "-c", "Release"], { cwd: "../vostok.devtools/configure-await-false" });
-        yield exec.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", "configureawaitfalse"], { cwd: "../vostok.devtools/configure-await-false" });
+        yield exec.exec("dotnet", ["build", "-c", "Release"], { cwd: "vostok.devtools/configure-await-false" });
+        yield exec.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", "configureawaitfalse"], { cwd: "vostok.devtools/configure-await-false" });
         yield exec.exec("configureawaitfalse", projectFolders);
         core.startGroup("Build");
-        yield exec.exec("dotnet", ["build", "-c", "Release"]);
+        yield exec.exec("dotnet", ["build", "-c", "Release"], { cwd: moduleFolder });
         if (external_os_.platform() === "win32") {
             core.startGroup("Cache");
             const testsCacheKey = getTestsCacheKey();
@@ -60976,7 +60975,7 @@ function build() {
             yield cache.saveCache(testsCachePaths, testsCacheKey);
         }
         core.startGroup("Test");
-        yield exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", "netcoreapp3.1", "--no-build"]);
+        yield exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", "netcoreapp3.1", "--no-build"], { cwd: moduleFolder });
     });
 }
 function test() {
@@ -60987,7 +60986,7 @@ function test() {
         core.info(`Uncaching: ${testsCachePaths} with key = ${testsCacheKey}`);
         yield cache.restoreCache(testsCachePaths, testsCacheKey);
         core.startGroup("Test");
-        yield exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"]);
+        yield exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"], { cwd: moduleFolder });
     });
 }
 function publish() {

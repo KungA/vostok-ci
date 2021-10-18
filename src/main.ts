@@ -6,11 +6,10 @@ import * as tc from '@actions/tool-cache'
 import * as cache from '@actions/cache'
 import * as path from 'path'
 import * as os from 'os'
-import {getTestsCacheKey, getTestsCachePaths} from "./helpers";
+import {getTestsCacheKey, getTestsCachePaths, moduleFolder} from "./helpers";
 import {platform} from "os";
 
 async function build(): Promise<void> {
-  const moduleFolder = "vostok.module";
   
   core.startGroup("Download Cement")
   const cementArchive = await tc.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip")
@@ -39,19 +38,19 @@ async function build(): Promise<void> {
   core.info(`Detected project files: ${projectFiles}`)
   const projectFolders = projectFiles.map(f => path.dirname(f))
   core.info(`Detected project folders: ${projectFolders}`)    
-  const testFilesGlobber = await glob.create(["*.Tests/*.csproj"].join("\n"))
+  const testFilesGlobber = await glob.create([`${moduleFolder}/*.Tests/*.csproj`].join("\n"))
   const testFiles = await testFilesGlobber.glob()
   core.info(`Detected test files: ${testFiles}`)
   const testFolders = testFiles.map(f => path.dirname(f))
   core.info(`Detected test folders: ${testFolders}`)
 
   core.startGroup("Check ConfigureAwait(false)")
-  await exec.exec("dotnet", ["build", "-c", "Release"], {cwd: "../vostok.devtools/configure-await-false"});
-  await exec.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", "configureawaitfalse"], {cwd: "../vostok.devtools/configure-await-false"});
+  await exec.exec("dotnet", ["build", "-c", "Release"], {cwd: "vostok.devtools/configure-await-false"});
+  await exec.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", "configureawaitfalse"], {cwd: "vostok.devtools/configure-await-false"});
   await exec.exec("configureawaitfalse", projectFolders);
 
   core.startGroup("Build")
-  await exec.exec("dotnet", ["build", "-c", "Release"]);
+  await exec.exec("dotnet", ["build", "-c", "Release"], {cwd: moduleFolder});
 
   if (os.platform() === "win32") {
     core.startGroup("Cache")
@@ -62,7 +61,7 @@ async function build(): Promise<void> {
   }
 
   core.startGroup("Test")
-  await exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", "netcoreapp3.1", "--no-build"]);
+  await exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", "netcoreapp3.1", "--no-build"], {cwd: moduleFolder});
 }
 
 async function test(): Promise<void> {
@@ -73,7 +72,7 @@ async function test(): Promise<void> {
   await cache.restoreCache(testsCachePaths, testsCacheKey)
 
   core.startGroup("Test")
-  await exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"]);
+  await exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"], {cwd: moduleFolder});
 }
 
 async function publish(): Promise<void> {
