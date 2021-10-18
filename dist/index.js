@@ -60983,7 +60983,7 @@ var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 function build() {
     return main_awaiter(this, void 0, void 0, function* () {
         core.info("Job: " + github.context.job);
-        core.info("Env: " + process.env);
+        core.info("Env: " + JSON.stringify(process.env));
         core.startGroup("Download Cement");
         const cementArchive = yield tool_cache.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip");
         const cementZip = yield tool_cache.extractZip(cementArchive, "cement-zip");
@@ -61045,8 +61045,8 @@ function publish() {
 function main() {
     return main_awaiter(this, void 0, void 0, function* () {
         try {
-            const type = core.getInput("type");
-            switch (type) {
+            const job = github.context.job;
+            switch (job) {
                 case "build":
                     yield build();
                     break;

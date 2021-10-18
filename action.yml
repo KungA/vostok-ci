@@ -5,9 +5,6 @@ runs:
   using: 'node12'
   main: 'dist/index.js'
 inputs:
-  type:
-    description: 'Action type'
-    required: true
   framework:
     description: 'Test framework'
     required: false
