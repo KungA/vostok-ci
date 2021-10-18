@@ -60909,7 +60909,7 @@ function getTestsCacheKey() {
     return `${github.context.repo.owner}.${github.context.repo.repo}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`;
 }
 function getTestsCachePaths() {
-    return ["**", external_path_.resolve("../vostok.devtools/")];
+    return [`${github.context.repo.repo}/`, external_path_.resolve("vostok.devtools/")];
 }
 
 ;// CONCATENATED MODULE: ./src/main.ts
@@ -60932,6 +60932,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 function build() {
     return __awaiter(this, void 0, void 0, function* () {
+        const moduleFolder = "vostok.module";
         core.startGroup("Download Cement");
         const cementArchive = yield tool_cache.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip");
         const cementZip = yield tool_cache.extractZip(cementArchive, "cement-zip");
@@ -60946,12 +60947,12 @@ function build() {
         core.addPath(`${external_os_.homedir()}/bin`);
         yield exec.exec("cm", ["--version"]);
         core.startGroup("Download dependencies");
-        yield exec.exec("cm", ["init"], { cwd: ".." });
-        yield exec.exec("cm", ["update-deps"]);
+        yield exec.exec("cm", ["init"]);
+        yield exec.exec("cm", ["update-deps"], { cwd: moduleFolder });
         core.startGroup("Build dependencies");
-        yield exec.exec("cm", ["build-deps"]);
+        yield exec.exec("cm", ["build-deps"], { cwd: moduleFolder });
         core.startGroup("Locate projects");
-        const projectFilesGlobber = yield glob.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"));
+        const projectFilesGlobber = yield glob.create([`${moduleFolder}/*/*.csproj`, `${moduleFolder}/!*.Tests/*.csproj`].join("\n"));
         const projectFiles = yield projectFilesGlobber.glob();
         core.info(`Detected project files: ${projectFiles}`);
         const projectFolders = projectFiles.map(f => external_path_.dirname(f));

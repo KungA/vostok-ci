@@ -7,5 +7,5 @@ export function getTestsCacheKey() {
 }
 
 export function getTestsCachePaths() {
-    return ["**", path.resolve("../vostok.devtools/")];
+    return [`${github.context.repo.repo}/`, path.resolve("vostok.devtools/")];
 }

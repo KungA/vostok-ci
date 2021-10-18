@@ -10,6 +10,8 @@ import {getTestsCacheKey, getTestsCachePaths} from "./helpers";
 import {platform} from "os";
 
 async function build(): Promise<void> {
+  const moduleFolder = "vostok.module";
+  
   core.startGroup("Download Cement")
   const cementArchive = await tc.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip")
   const cementZip = await tc.extractZip(cementArchive, "cement-zip")
@@ -25,14 +27,14 @@ async function build(): Promise<void> {
   await exec.exec("cm", ["--version"]);
 
   core.startGroup("Download dependencies")
-  await exec.exec("cm", ["init"], {cwd: ".."});
-  await exec.exec("cm", ["update-deps"]);
+  await exec.exec("cm", ["init"]);
+  await exec.exec("cm", ["update-deps"], {cwd: moduleFolder});
 
   core.startGroup("Build dependencies")
-  await exec.exec("cm", ["build-deps"]);
+  await exec.exec("cm", ["build-deps"], {cwd: moduleFolder});
 
   core.startGroup("Locate projects")
-  const projectFilesGlobber = await glob.create(["*/*.csproj", "!*.Tests/*.csproj"].join("\n"))
+  const projectFilesGlobber = await glob.create([`${moduleFolder}/*/*.csproj`, `${moduleFolder}/!*.Tests/*.csproj`].join("\n"))
   const projectFiles = await projectFilesGlobber.glob()
   core.info(`Detected project files: ${projectFiles}`)
   const projectFolders = projectFiles.map(f => path.dirname(f))
