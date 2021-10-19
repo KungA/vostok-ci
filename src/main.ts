@@ -10,6 +10,8 @@ import {getTestsCacheKey, getTestsCachePaths, execTool, moduleFolder} from "./he
 import {platform} from "os";
 
 async function build(): Promise<void> {
+  core.info(`Building '${github.context.ref}'`)
+  
   core.startGroup("Download Cement")
   const cementArchive = await tc.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip")
   const cementZip = await tc.extractZip(cementArchive, "cement-zip")
