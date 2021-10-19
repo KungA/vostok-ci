@@ -60948,7 +60948,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 const moduleFolder = "vostok.module";
 function getTestsCacheKey() {
-    return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${core.getInput("references")}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`;
+    return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${core.getInput("references")}-${process.env.GITHUB_RUN_NUMBER}-${process.env.GITHUB_RUN_ATTEMPT}`;
 }
 function getTestsCachePaths() {
     return [moduleFolder, "vostok.devtools/**/*.props"];
