@@ -6,7 +6,7 @@ import * as tc from '@actions/tool-cache'
 import * as cache from '@actions/cache'
 import * as path from 'path'
 import * as os from 'os'
-import {getTestsCacheKey, getTestsCachePaths, execTool, moduleFolder} from "./helpers";
+import {getTestsCacheKey, getTestsCachePaths, execTool, moduleFolder, isMasterBranch, isReleaseBranch} from "./helpers";
 import {platform} from "os";
 
 async function build(): Promise<void> {
@@ -54,6 +54,11 @@ async function build(): Promise<void> {
   } else {
     core.startGroup("Replace cement references")
     await execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json"], {cwd: moduleFolder})
+  }
+  
+  if (isMasterBranch && !isReleaseBranch) {
+    core.startGroup("Add version suffix")
+    await execTool("dotnetversionsuffix", ["pre" + String(github.context.runNumber).padStart(6, "0")], {cwd: moduleFolder});
   }
   
   core.startGroup("Build")
