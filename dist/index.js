@@ -61012,6 +61012,8 @@ function build() {
         core.info(`Detected test folders: ${testFolders}`);
         core.startGroup("Check ConfigureAwait(false)");
         yield execTool("configure-await-false", projectFolders);
+        core.startGroup("Check TaskCreationOptions.RunContinuationsAsynchronously");
+        yield execTool("tcs-create-options", projectFolders);
         if (core.getInput("references") == "cement") {
             core.startGroup("Build dependencies");
             yield exec.exec("cm", ["build-deps"], { cwd: moduleFolder });

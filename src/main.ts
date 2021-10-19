@@ -43,6 +43,9 @@ async function build(): Promise<void> {
   core.startGroup("Check ConfigureAwait(false)")
   await execTool("configure-await-false", projectFolders);
 
+  core.startGroup("Check TaskCreationOptions.RunContinuationsAsynchronously")
+  await execTool("tcs-create-options", projectFolders);
+
   if (core.getInput("references") == "cement") {
     core.startGroup("Build dependencies")
     await exec.exec("cm", ["build-deps"], {cwd: moduleFolder});
