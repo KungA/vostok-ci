@@ -61056,8 +61056,10 @@ function test() {
 }
 function publish() {
     return main_awaiter(this, void 0, void 0, function* () {
+        core.startGroup("Restore");
+        yield exec.exec("dotnet", ["restore"], { cwd: moduleFolder });
         core.startGroup("Pack");
-        yield exec.exec("dotnet", ["pack", "-c", "Release"], { cwd: moduleFolder });
+        yield exec.exec("dotnet", ["pack", "-c", "Release", "--no-build"], { cwd: moduleFolder });
         core.startGroup("Publish");
         const packagesGlobber = yield glob.create([`${moduleFolder}/**/*.nupkg`].join("\n"));
         const packagesFiles = yield packagesGlobber.glob();

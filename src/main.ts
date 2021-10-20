@@ -90,8 +90,11 @@ async function test(): Promise<void> {
 }
 
 async function publish(): Promise<void> {
+  core.startGroup("Restore")
+  await exec.exec("dotnet", ["restore"], {cwd: moduleFolder});
+  
   core.startGroup("Pack")
-  await exec.exec("dotnet", ["pack", "-c", "Release"], {cwd: moduleFolder});
+  await exec.exec("dotnet", ["pack", "-c", "Release", "--no-build"], {cwd: moduleFolder});
   
   core.startGroup("Publish")
   const packagesGlobber = await glob.create([`${moduleFolder}/**/*.nupkg`].join("\n"))
