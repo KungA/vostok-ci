@@ -61056,6 +61056,11 @@ function test() {
 }
 function publish() {
     return main_awaiter(this, void 0, void 0, function* () {
+        core.startGroup("Uncache");
+        const testsCacheKey = getTestsCacheKey();
+        const testsCachePaths = getTestsCachePaths();
+        core.info(`Uncaching: ${testsCachePaths} with key = ${testsCacheKey}`);
+        yield cache.restoreCache(testsCachePaths, testsCacheKey);
         core.startGroup("Restore");
         yield exec.exec("dotnet", ["restore"], { cwd: moduleFolder });
         core.startGroup("Pack");
@@ -61064,6 +61069,9 @@ function publish() {
         const packagesGlobber = yield glob.create([`${moduleFolder}/**/*.nupkg`].join("\n"));
         const packagesFiles = yield packagesGlobber.glob();
         core.info(`Detected packages: ${packagesFiles}`);
+        for (const packagesFile in packagesFiles) {
+            core.notice(`${packagesFile} published`);
+        }
     });
 }
 function main() {

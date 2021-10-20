@@ -90,6 +90,12 @@ async function test(): Promise<void> {
 }
 
 async function publish(): Promise<void> {
+  core.startGroup("Uncache")
+  const testsCacheKey = getTestsCacheKey()
+  const testsCachePaths = getTestsCachePaths();
+  core.info(`Uncaching: ${testsCachePaths} with key = ${testsCacheKey}`)
+  await cache.restoreCache(testsCachePaths, testsCacheKey)
+  
   core.startGroup("Restore")
   await exec.exec("dotnet", ["restore"], {cwd: moduleFolder});
   
@@ -100,6 +106,10 @@ async function publish(): Promise<void> {
   const packagesGlobber = await glob.create([`${moduleFolder}/**/*.nupkg`].join("\n"))
   const packagesFiles = await packagesGlobber.glob()
   core.info(`Detected packages: ${packagesFiles}`)
+  for (const packagesFile in packagesFiles) {   
+    
+    core.notice(`${packagesFile} published`)
+  }
 }
 
 async function main(): Promise<void> {
