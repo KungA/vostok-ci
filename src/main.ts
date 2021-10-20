@@ -6,8 +6,7 @@ import * as tc from '@actions/tool-cache'
 import * as cache from '@actions/cache'
 import * as path from 'path'
 import * as os from 'os'
-import {getTestsCacheKey, getTestsCachePaths, execTool, moduleFolder, isMasterBranch, isReleaseBranch} from "./helpers";
-import {platform} from "os";
+import {getTestsCacheKey, getTestsCachePaths, execTool, moduleFolder, isMaster, isRelease} from "./helpers";
 
 async function build(): Promise<void> {
   core.info(`Building '${github.context.ref}'`)
@@ -56,7 +55,7 @@ async function build(): Promise<void> {
     await execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json"], {cwd: moduleFolder})
   }
   
-  if (isMasterBranch && !isReleaseBranch) {
+  if (isMaster && !isRelease) {
     core.startGroup("Add version suffix")
     await execTool("dotnetversionsuffix", ["pre" + String(github.context.runNumber).padStart(6, "0")], {cwd: moduleFolder});
   }
@@ -91,6 +90,9 @@ async function test(): Promise<void> {
 }
 
 async function publish(): Promise<void> {
+  core.startGroup("Pack")
+  await exec.exec("dotnet", ["pack", "-c", "Release"], {cwd: moduleFolder});
+  
   core.startGroup("Publish")
 }
 

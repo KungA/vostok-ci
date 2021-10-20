@@ -7,8 +7,8 @@ import * as core from "@actions/core";
 
 export const moduleFolder = "vostok.module";
 
-export const isMasterBranch = github.context.ref == "refs/heads/master"
-export const isReleaseBranch = github.context.ref.startsWith("refs/tags/release/")
+export const isMaster = github.context.ref == "refs/heads/master"
+export const isRelease = github.context.ref.startsWith("refs/tags/release/")
 
 export function getTestsCacheKey() {
     return `${github.context.repo.owner}.${github.context.repo.repo}-${os.platform()}-${core.getInput("references")}-${process.env.GITHUB_RUN_NUMBER}-${process.env.GITHUB_RUN_ATTEMPT}`;
