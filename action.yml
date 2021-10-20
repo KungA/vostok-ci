@@ -11,3 +11,6 @@ inputs:
   references:
     description: 'References type'
     required: false
+  key:
+    description: 'Key'
+    required: false

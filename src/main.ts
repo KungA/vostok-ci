@@ -107,7 +107,7 @@ async function publish(): Promise<void> {
   const packagesFiles = await packagesGlobber.glob()
   core.info(`Detected packages: ${packagesFiles}`)
   for (const packagesFile of packagesFiles) {
-    await exec.exec("dotnet", ["nuget", "push", packagesFile, "--api-key", process.env.GITHUB_TOKEN!, "--source", "https://nuget.pkg.github.com/vostok/index.json"]);    
+    await exec.exec("dotnet", ["nuget", "push", packagesFile, "--api-key", core.getInput("key"), "--source", "https://api.nuget.org/v3/index.json"]);   
     core.notice(`${packagesFile} published`)
   }
 }

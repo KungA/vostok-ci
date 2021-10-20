@@ -61070,7 +61070,7 @@ function publish() {
         const packagesFiles = yield packagesGlobber.glob();
         core.info(`Detected packages: ${packagesFiles}`);
         for (const packagesFile of packagesFiles) {
-            yield exec.exec("dotnet", ["nuget", "push", packagesFile, "--api-key", process.env.GITHUB_TOKEN, "--source", "https://nuget.pkg.github.com/vostok/index.json"]);
+            yield exec.exec("dotnet", ["nuget", "push", packagesFile, "--api-key", core.getInput("key"), "--source", "https://api.nuget.org/v3/index.json"]);
             core.notice(`${packagesFile} published`);
         }
     });
