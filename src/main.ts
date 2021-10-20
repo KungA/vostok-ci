@@ -94,6 +94,9 @@ async function publish(): Promise<void> {
   await exec.exec("dotnet", ["pack", "-c", "Release"], {cwd: moduleFolder});
   
   core.startGroup("Publish")
+  const packagesGlobber = await glob.create([`${moduleFolder}/**/*.nupkg`].join("\n"))
+  const packagesFiles = await packagesGlobber.glob()
+  core.info(`Detected packages: ${packagesFiles}`)
 }
 
 async function main(): Promise<void> {

@@ -61059,6 +61059,9 @@ function publish() {
         core.startGroup("Pack");
         yield exec.exec("dotnet", ["pack", "-c", "Release"], { cwd: moduleFolder });
         core.startGroup("Publish");
+        const packagesGlobber = yield glob.create([`${moduleFolder}/**/*.nupkg`].join("\n"));
+        const packagesFiles = yield packagesGlobber.glob();
+        core.info(`Detected packages: ${packagesFiles}`);
     });
 }
 function main() {
