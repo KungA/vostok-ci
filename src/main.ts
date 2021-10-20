@@ -103,11 +103,11 @@ async function publish(): Promise<void> {
   await exec.exec("dotnet", ["pack", "-c", "Release", "--no-build"], {cwd: moduleFolder});
   
   core.startGroup("Publish")
-  const packagesGlobber = await glob.create([`${moduleFolder}/**/*.nupkg`].join("\n"))
+  const packagesGlobber = await glob.create([`${moduleFolder}/**/*.nupkg`, `${moduleFolder}/**/*.snupkg`].join("\n"))
   const packagesFiles = await packagesGlobber.glob()
   core.info(`Detected packages: ${packagesFiles}`)
-  for (const packagesFile in packagesFiles) {   
-    
+  for (const packagesFile of packagesFiles) {
+    await exec.exec("dotnet", ["nuget", "push", packagesFile, "--api-key", process.env.GITHUB_TOKEN!, "--source", "https://nuget.pkg.github.com/vostok/index.json"]);    
     core.notice(`${packagesFile} published`)
   }
 }

@@ -61066,10 +61066,11 @@ function publish() {
         core.startGroup("Pack");
         yield exec.exec("dotnet", ["pack", "-c", "Release", "--no-build"], { cwd: moduleFolder });
         core.startGroup("Publish");
-        const packagesGlobber = yield glob.create([`${moduleFolder}/**/*.nupkg`].join("\n"));
+        const packagesGlobber = yield glob.create([`${moduleFolder}/**/*.nupkg`, `${moduleFolder}/**/*.snupkg`].join("\n"));
         const packagesFiles = yield packagesGlobber.glob();
         core.info(`Detected packages: ${packagesFiles}`);
-        for (const packagesFile in packagesFiles) {
+        for (const packagesFile of packagesFiles) {
+            yield exec.exec("dotnet", ["nuget", "push", packagesFile, "--api-key", process.env.GITHUB_TOKEN, "--source", "https://nuget.pkg.github.com/vostok/index.json"]);
             core.notice(`${packagesFile} published`);
         }
     });
