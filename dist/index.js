@@ -60946,20 +60946,22 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 
 
-const moduleFolder = "vostok.module";
-const isMaster = github.context.ref == "refs/heads/master";
-const isRelease = github.context.ref.startsWith("refs/tags/release/");
+const moduleFolder = 'vostok.module';
+const isMaster = github.context.ref == 'refs/heads/master';
+const isRelease = github.context.ref.startsWith('refs/tags/release/');
 function getTestsCacheKey(references) {
-    return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${references !== null && references !== void 0 ? references : core.getInput("references")}-${process.env.GITHUB_RUN_NUMBER}-${process.env.GITHUB_RUN_ATTEMPT}`;
+    return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${references !== null && references !== void 0 ? references : core.getInput('references')}-${process.env.GITHUB_RUN_NUMBER}-${process.env.GITHUB_RUN_ATTEMPT}`;
 }
 function getTestsCachePaths() {
-    return [moduleFolder, "vostok.devtools/**/*.props"];
+    return [moduleFolder, 'vostok.devtools/**/*.props'];
 }
 function execTool(tool, args, options) {
     return __awaiter(this, void 0, void 0, function* () {
-        const toolName = tool.replace(/-/g, "");
-        yield exec.exec("dotnet", ["build", "-c", "Release"], { cwd: `vostok.devtools/${tool}` });
-        yield exec.exec("dotnet", ["tool", "update", "--add-source", "nupkg", "-g", toolName], { cwd: `vostok.devtools/${tool}` });
+        const toolName = tool.replace(/-/g, '');
+        yield exec.exec('dotnet', ['build', '-c', 'Release'], {
+            cwd: `vostok.devtools/${tool}`
+        });
+        yield exec.exec('dotnet', ['tool', 'update', '--add-source', 'nupkg', '-g', toolName], { cwd: `vostok.devtools/${tool}` });
         yield exec.exec(toolName, args, options);
     });
 }
@@ -60986,52 +60988,52 @@ var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 function build() {
     return main_awaiter(this, void 0, void 0, function* () {
         core.info(`Building '${github.context.ref}'`);
-        core.startGroup("Download Cement");
-        const cementArchive = yield tool_cache.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip");
-        const cementZip = yield tool_cache.extractZip(cementArchive, "cement-zip");
-        core.startGroup("Install Cement");
+        core.startGroup('Download Cement');
+        const cementArchive = yield tool_cache.downloadTool('https://github.com/skbkontur/cement/releases/download/v1.0.71/eed45d0e872e6d783b3a4eb8db0904f574de7018.zip');
+        const cementZip = yield tool_cache.extractZip(cementArchive, 'cement-zip');
+        core.startGroup('Install Cement');
         if (external_os_.platform() !== 'win32') {
-            yield exec.exec("chmod +x ./install.sh", [], { cwd: `${cementZip}/dotnet` });
-            yield exec.exec("./install.sh", [], { cwd: `${cementZip}/dotnet` });
+            yield exec.exec('chmod +x ./install.sh', [], { cwd: `${cementZip}/dotnet` });
+            yield exec.exec('./install.sh', [], { cwd: `${cementZip}/dotnet` });
         }
         else {
-            yield exec.exec("./install.cmd", [], { cwd: `${cementZip}/dotnet` });
+            yield exec.exec('./install.cmd', [], { cwd: `${cementZip}/dotnet` });
         }
         core.addPath(`${external_os_.homedir()}/bin`);
-        yield exec.exec("cm", ["--version"]);
-        core.startGroup("Download dependencies");
-        yield exec.exec("cm", ["init"]);
-        yield exec.exec("cm", ["update-deps"], { cwd: moduleFolder });
-        core.startGroup("Locate projects");
-        const projectFilesGlobber = yield glob.create([`${moduleFolder}/*/*.csproj`, `!${moduleFolder}/*.Tests/*.csproj`].join("\n"));
+        yield exec.exec('cm', ['--version']);
+        core.startGroup('Download dependencies');
+        yield exec.exec('cm', ['init']);
+        yield exec.exec('cm', ['update-deps'], { cwd: moduleFolder });
+        core.startGroup('Locate projects');
+        const projectFilesGlobber = yield glob.create([`${moduleFolder}/*/*.csproj`, `!${moduleFolder}/*.Tests/*.csproj`].join('\n'));
         const projectFiles = yield projectFilesGlobber.glob();
         core.info(`Detected project files: ${projectFiles}`);
         const projectFolders = projectFiles.map(f => external_path_.dirname(f));
         core.info(`Detected project folders: ${projectFolders}`);
-        const testFilesGlobber = yield glob.create([`${moduleFolder}/*.Tests/*.csproj`].join("\n"));
+        const testFilesGlobber = yield glob.create([`${moduleFolder}/*.Tests/*.csproj`].join('\n'));
         const testFiles = yield testFilesGlobber.glob();
         core.info(`Detected test files: ${testFiles}`);
         const testFolders = testFiles.map(f => external_path_.dirname(f));
         core.info(`Detected test folders: ${testFolders}`);
-        core.startGroup("Check ConfigureAwait(false)");
-        yield execTool("configure-await-false", projectFolders);
-        core.startGroup("Check TaskCreationOptions.RunContinuationsAsynchronously");
-        yield execTool("tcs-create-options", projectFolders);
-        if (core.getInput("references") == "cement") {
-            core.startGroup("Build dependencies");
-            yield exec.exec("cm", ["build-deps"], { cwd: moduleFolder });
+        core.startGroup('Check ConfigureAwait(false)');
+        yield execTool('configure-await-false', projectFolders);
+        core.startGroup('Check TaskCreationOptions.RunContinuationsAsynchronously');
+        yield execTool('tcs-create-options', projectFolders);
+        if (core.getInput('references') == 'cement') {
+            core.startGroup('Build dependencies');
+            yield exec.exec('cm', ['build-deps'], { cwd: moduleFolder });
         }
         else {
-            core.startGroup("Replace cement references");
-            yield execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json"], { cwd: moduleFolder });
+            core.startGroup('Replace cement references');
+            yield execTool('dotnetcementrefs', ['--source:https://api.nuget.org/v3/index.json'], { cwd: moduleFolder });
         }
         if (isMaster && !isRelease) {
-            core.startGroup("Add version suffix");
-            yield execTool("dotnetversionsuffix", ["pre" + String(github.context.runNumber).padStart(6, "0")], { cwd: moduleFolder });
+            core.startGroup('Add version suffix');
+            yield execTool('dotnetversionsuffix', [`pre${String(github.context.runNumber).padStart(6, '0')}`], { cwd: moduleFolder });
         }
-        core.startGroup("Build");
-        yield exec.exec("dotnet", ["build", "-c", "Release"], { cwd: moduleFolder });
-        core.startGroup("Cache");
+        core.startGroup('Build');
+        yield exec.exec('dotnet', ['build', '-c', 'Release'], { cwd: moduleFolder });
+        core.startGroup('Cache');
         const testsCacheKey = getTestsCacheKey();
         const testsCachePaths = getTestsCachePaths();
         core.info(`Caching: ${testsCachePaths} with key = ${testsCacheKey}`);
@@ -61040,37 +61042,61 @@ function build() {
 }
 function test() {
     return main_awaiter(this, void 0, void 0, function* () {
-        core.startGroup("Uncache");
+        core.startGroup('Uncache');
         const testsCacheKey = getTestsCacheKey();
         const testsCachePaths = getTestsCachePaths();
         core.info(`Uncaching: ${testsCachePaths} with key = ${testsCacheKey}`);
         yield cache.restoreCache(testsCachePaths, testsCacheKey);
-        core.startGroup("Restore");
-        yield exec.exec("dotnet", ["restore"], { cwd: moduleFolder });
-        core.startGroup("Test");
-        yield exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"], { cwd: moduleFolder, listeners: { stdline: line => {
-                    if (line.indexOf("Total:   ") != -1)
+        core.startGroup('Restore');
+        yield exec.exec('dotnet', ['restore'], { cwd: moduleFolder });
+        core.startGroup('Test');
+        yield exec.exec('dotnet', [
+            'test',
+            '-c',
+            'Release',
+            '--logger',
+            'GitHubActions',
+            '--framework',
+            core.getInput('framework'),
+            '--no-build'
+        ], {
+            cwd: moduleFolder,
+            listeners: {
+                stdline: line => {
+                    if (line.includes('Total:   '))
                         core.notice(line);
-                } } });
+                }
+            }
+        });
     });
 }
 function publish() {
     return main_awaiter(this, void 0, void 0, function* () {
-        core.startGroup("Uncache");
-        const testsCacheKey = getTestsCacheKey("nuget");
+        core.startGroup('Uncache');
+        const testsCacheKey = getTestsCacheKey('nuget');
         const testsCachePaths = getTestsCachePaths();
         core.info(`Uncaching: ${testsCachePaths} with key = ${testsCacheKey}`);
         yield cache.restoreCache(testsCachePaths, testsCacheKey);
-        core.startGroup("Restore");
-        yield exec.exec("dotnet", ["restore"], { cwd: moduleFolder });
-        core.startGroup("Pack");
-        yield exec.exec("dotnet", ["pack", "-c", "Release", "--no-build"], { cwd: moduleFolder });
-        core.startGroup("Publish");
-        const packagesGlobber = yield glob.create([`${moduleFolder}/**/*.nupkg`, `${moduleFolder}/**/*.snupkg`].join("\n"));
+        core.startGroup('Restore');
+        yield exec.exec('dotnet', ['restore'], { cwd: moduleFolder });
+        core.startGroup('Pack');
+        yield exec.exec('dotnet', ['pack', '-c', 'Release', '--no-build'], {
+            cwd: moduleFolder
+        });
+        core.startGroup('Publish');
+        const packagesGlobber = yield glob.create([`${moduleFolder}/**/*.nupkg`, `${moduleFolder}/**/*.snupkg`].join('\n'));
         const packagesFiles = yield packagesGlobber.glob();
         core.info(`Detected packages: ${packagesFiles}`);
         for (const packagesFile of packagesFiles) {
-            yield exec.exec("dotnet", ["nuget", "push", packagesFile, "--api-key", core.getInput("key"), "--source", "https://api.nuget.org/v3/index.json"]);
+            yield exec.exec('dotnet', [
+                'nuget',
+                'push',
+                packagesFile,
+                '--api-key',
+                core.getInput('key'),
+                '--source',
+                'https://api.nuget.org/v3/index.json'
+            ]);
             core.notice(`${packagesFile} published`);
         }
     });
@@ -61080,16 +61106,17 @@ function main() {
         try {
             const job = github.context.job;
             switch (job) {
-                case "build":
+                case 'build':
                     yield build();
                     break;
-                case "test":
+                case 'test':
                     yield test();
                     break;
-                case "publish":
+                case 'publish':
                     yield publish();
                     break;
-                default: core.setFailed(`Unknown '${job}' job.`);
+                default:
+                    core.setFailed(`Unknown '${job}' job.`);
             }
         }
         catch (error) {
