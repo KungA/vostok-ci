@@ -60949,8 +60949,8 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 const moduleFolder = "vostok.module";
 const isMaster = github.context.ref == "refs/heads/master";
 const isRelease = github.context.ref.startsWith("refs/tags/release/");
-function getTestsCacheKey() {
-    return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${core.getInput("references")}-${process.env.GITHUB_RUN_NUMBER}-${process.env.GITHUB_RUN_ATTEMPT}`;
+function getTestsCacheKey(references) {
+    return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${references !== null && references !== void 0 ? references : core.getInput("references")}-${process.env.GITHUB_RUN_NUMBER}-${process.env.GITHUB_RUN_ATTEMPT}`;
 }
 function getTestsCachePaths() {
     return [moduleFolder, "vostok.devtools/**/*.props"];
@@ -61057,7 +61057,7 @@ function test() {
 function publish() {
     return main_awaiter(this, void 0, void 0, function* () {
         core.startGroup("Uncache");
-        const testsCacheKey = getTestsCacheKey();
+        const testsCacheKey = getTestsCacheKey("nuget");
         const testsCachePaths = getTestsCachePaths();
         core.info(`Uncaching: ${testsCachePaths} with key = ${testsCacheKey}`);
         yield cache.restoreCache(testsCachePaths, testsCacheKey);

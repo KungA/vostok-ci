@@ -91,7 +91,7 @@ async function test(): Promise<void> {
 
 async function publish(): Promise<void> {
   core.startGroup("Uncache")
-  const testsCacheKey = getTestsCacheKey()
+  const testsCacheKey = getTestsCacheKey("nuget")
   const testsCachePaths = getTestsCachePaths();
   core.info(`Uncaching: ${testsCachePaths} with key = ${testsCacheKey}`)
   await cache.restoreCache(testsCachePaths, testsCacheKey)
