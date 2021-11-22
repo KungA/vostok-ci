@@ -4,6 +4,7 @@ on:
   workflow_call:
     inputs:
       frameworks: 
+        type: string
         default: '[netcoreapp2.1, net471]'
 
 jobs:
