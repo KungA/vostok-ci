@@ -32,7 +32,7 @@ jobs:
         uses: actions/setup-dotnet@main
         with:
           dotnet-version: '5.0.x'
-        if: ${{ contains(fromJSON(inputs.frameworks), net5.0 }}
+        if: ${{ contains(fromJSON(inputs.frameworks), 'net5.0' }}
 
       - name: Install .NET 6.0
         uses: actions/setup-dotnet@main
