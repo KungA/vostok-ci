@@ -3,7 +3,7 @@ name: Publish
 on: workflow_call
 
 jobs:
-  build:
+  publish:
     strategy:
       fail-fast: false
       matrix:
