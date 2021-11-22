@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       frameworks: 
-        required: true      
+        default: '[netcoreapp2.1, net471]'
 
 jobs:
   test:
@@ -13,10 +13,12 @@ jobs:
       matrix:
         os: [windows-latest, ubuntu-latest]
         references: [cement, nuget]
-        framework: ${{ inputs.frameworks }}
+        framework: ${{ fromJSON(inputs.frameworks) }}
         exclude: 
           - os: ubuntu-latest
             framework: net48
+          - os: ubuntu-latest
+            framework: net471        
     runs-on: ${{ matrix.os }}
    
     steps:
