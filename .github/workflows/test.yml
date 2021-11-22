@@ -1,0 +1,42 @@
+name: Test
+
+on: 
+  workflow_call:
+    inputs:
+      frameworks: 
+        required: true      
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        references: [cement, nuget]
+        framework: ${{ inputs.frameworks }}
+        exclude: 
+          - os: ubuntu-latest
+            framework: net48
+    runs-on: ${{ matrix.os }}
+   
+    steps:
+      - name: Install .NET Core 3.1
+        uses: actions/setup-dotnet@main
+        with:
+          dotnet-version: '3.1.x'
+          
+      - name: Install .NET 5.0
+        uses: actions/setup-dotnet@main
+        with:
+          dotnet-version: '5.0.x'
+
+      - name: Install .NET 6.0
+        uses: actions/setup-dotnet@main
+        with:
+          dotnet-version: '6.0.x'
+        
+      - name: Test
+        uses: vostok/github.ci@master
+        with:
+          references: ${{ matrix.references }}
+          framework: ${{ matrix.framework }}
