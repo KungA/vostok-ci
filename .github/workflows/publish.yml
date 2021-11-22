@@ -20,4 +20,4 @@ jobs:
       - name: Publish
         uses: vostok/github.ci@master
         with: 
-          key: ${{ secrets.NUGET_TOKEN }}
+          key: ${{ secrets.token }}
