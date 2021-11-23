@@ -6,6 +6,8 @@ on:
       frameworks: 
         type: string
         default: '["net6.0", "netcoreapp2.1", "net471"]'
+      needs-java:
+        type: boolean
 
 jobs:
   test:
@@ -44,7 +46,14 @@ jobs:
         uses: actions/setup-dotnet@main
         with:
           dotnet-version: '2.1.x'
-        
+
+      - name: Install Java SDK
+        uses: actions/setup-java@v2.3.0
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+        if: ${{ inputs.needs-java }}
+          
       - name: Test
         uses: vostok/github.ci@master
         with:
