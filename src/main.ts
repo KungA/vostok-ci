@@ -81,12 +81,17 @@ async function test(): Promise<void> {
   await exec.exec("dotnet", ["restore"], {cwd: moduleFolder});
   
   core.startGroup("Test")
+  let tested = false
   await exec.exec("dotnet", 
       ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"], 
       {cwd: moduleFolder, listeners: {stdline: line => {
         if (line.indexOf("Total:   ") != -1)
           core.notice(line)
+          tested = true
           }}});
+  if (!tested) {
+    core.setFailed("Tests not found.")
+  }
 }
 
 async function publish(): Promise<void> {

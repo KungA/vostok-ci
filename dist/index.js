@@ -61048,10 +61048,15 @@ function test() {
         core.startGroup("Restore");
         yield exec.exec("dotnet", ["restore"], { cwd: moduleFolder });
         core.startGroup("Test");
+        let tested = false;
         yield exec.exec("dotnet", ["test", "-c", "Release", "--logger", "GitHubActions", "--framework", core.getInput("framework"), "--no-build"], { cwd: moduleFolder, listeners: { stdline: line => {
                     if (line.indexOf("Total:   ") != -1)
                         core.notice(line);
+                    tested = true;
                 } } });
+        if (!tested) {
+            core.setFailed("Tests not found.");
+        }
     });
 }
 function publish() {
