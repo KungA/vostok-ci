@@ -3,6 +3,9 @@ name: Test
 on: 
   workflow_call:
     inputs:
+      os:
+        type: string
+        default: '["windows-latest", "ubuntu-latest"]'
       frameworks: 
         type: string
         default: '["net6.0", "netcoreapp2.1", "net471"]'
@@ -14,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        os: ${{ fromJSON(inputs.os) }}
         references: [cement, nuget]
         framework: ${{ fromJSON(inputs.frameworks) }}
         exclude: 
