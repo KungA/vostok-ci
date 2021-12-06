@@ -52,7 +52,7 @@ async function build(): Promise<void> {
     await exec.exec("cm", ["build-deps"], {cwd: moduleFolder});
   } else {
     core.startGroup("Replace cement references")
-    await execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json"], {cwd: moduleFolder})
+    await execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json", "--ensureMultitargeted"], {cwd: moduleFolder})
   }
   
   if (isMaster && !isRelease) {
