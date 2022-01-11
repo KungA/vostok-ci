@@ -60949,6 +60949,7 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 const moduleFolder = "vostok.module";
 const isMaster = github.context.ref == "refs/heads/master";
 const isRelease = github.context.ref.startsWith("refs/tags/release/");
+const isPreRelease = github.context.ref.startsWith("refs/tags/prerelease/");
 function getTestsCacheKey(references) {
     return `${github.context.repo.owner}.${github.context.repo.repo}-${external_os_default().platform()}-${references !== null && references !== void 0 ? references : core.getInput("references")}-${process.env.GITHUB_RUN_NUMBER}-${process.env.GITHUB_RUN_ATTEMPT}`;
 }
@@ -61025,7 +61026,7 @@ function build() {
             core.startGroup("Replace cement references");
             yield execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json", "--ensureMultitargeted"], { cwd: moduleFolder });
         }
-        if (isMaster && !isRelease) {
+        if (!isRelease) {
             core.startGroup("Add version suffix");
             yield execTool("dotnetversionsuffix", ["pre" + String(github.context.runNumber).padStart(6, "0")], { cwd: moduleFolder });
         }

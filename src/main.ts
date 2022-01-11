@@ -6,7 +6,7 @@ import * as tc from '@actions/tool-cache'
 import * as cache from '@actions/cache'
 import * as path from 'path'
 import * as os from 'os'
-import {getTestsCacheKey, getTestsCachePaths, execTool, moduleFolder, isMaster, isRelease} from "./helpers";
+import {getTestsCacheKey, getTestsCachePaths, execTool, moduleFolder, isRelease} from "./helpers";
 
 async function build(): Promise<void> {
   core.info(`Building '${github.context.ref}'`)
@@ -55,7 +55,7 @@ async function build(): Promise<void> {
     await execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json", "--ensureMultitargeted"], {cwd: moduleFolder})
   }
   
-  if (isMaster && !isRelease) {
+  if (!isRelease) {
     core.startGroup("Add version suffix")
     await execTool("dotnetversionsuffix", ["pre" + String(github.context.runNumber).padStart(6, "0")], {cwd: moduleFolder});
   }
