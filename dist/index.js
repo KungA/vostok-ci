@@ -60992,11 +60992,11 @@ function build() {
         const cementZip = yield tool_cache.extractZip(cementArchive, "cement-zip");
         core.startGroup("Install Cement");
         if (external_os_.platform() !== 'win32') {
-            yield exec.exec("chmod +x ./install.sh", [], { cwd: `${cementZip}/dotnet` });
-            yield exec.exec("./install.sh", [], { cwd: `${cementZip}/dotnet` });
+            yield exec.exec("chmod +x ./install.sh", [], { cwd: `${cementZip}/dotnet/linux-x64` });
+            yield exec.exec("./install.sh", [], { cwd: `${cementZip}/dotnet/linux-x64` });
         }
         else {
-            yield exec.exec("./install.cmd", [], { cwd: `${cementZip}/dotnet` });
+            yield exec.exec("./install.cmd", [], { cwd: `${cementZip}/dotnet/win10-x64` });
         }
         core.addPath(`${external_os_.homedir()}/bin`);
         yield exec.exec("cm", ["--version"]);
