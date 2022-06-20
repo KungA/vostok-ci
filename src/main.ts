@@ -17,10 +17,10 @@ async function build(): Promise<void> {
 
   core.startGroup("Install Cement")
   if (os.platform() !== 'win32') {
-    await exec.exec("chmod +x ./install.sh", [], {cwd: `${cementZip}/dotnet/linux-x64`});
-    await exec.exec("./install.sh", [], {cwd: `${cementZip}/dotnet/linux-x64`});
+    await exec.exec("chmod +x ./linux-x64/install.sh", [], {cwd: `${cementZip}/dotnet`});
+    await exec.exec("./linux-x64/install.sh", [], {cwd: `${cementZip}/dotnet`});
   } else {
-    await exec.exec("./install.cmd", [], {cwd: `${cementZip}/dotnet/win10-x64`});
+    await exec.exec("./win10-x64/install.cmd", [], {cwd: `${cementZip}/dotnet`});
   }
   core.addPath(`${os.homedir()}/bin`)
   await exec.exec("cm", ["--version"]);
