@@ -60988,15 +60988,15 @@ function build() {
     return main_awaiter(this, void 0, void 0, function* () {
         core.info(`Building '${github.context.ref}'`);
         core.startGroup("Download Cement");
-        const cementArchive = yield tool_cache.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.81/106716a0ecffb63c6d78da82c80db55acaf92d81.zip");
+        const cementArchive = yield tool_cache.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.82/20fe13e7562b8b087213969b960141e2c6930a06.zip");
         const cementZip = yield tool_cache.extractZip(cementArchive, "cement-zip");
         core.startGroup("Install Cement");
         if (external_os_.platform() !== 'win32') {
-            yield exec.exec("chmod +x ./linux-x64/install.sh", [], { cwd: `${cementZip}/dotnet` });
-            yield exec.exec("./linux-x64/install.sh", [], { cwd: `${cementZip}/dotnet` });
+            yield exec.exec("chmod +x ./install.sh", [], { cwd: `${cementZip}/dotnet/linux-x64` });
+            yield exec.exec("./install.sh", [], { cwd: `${cementZip}/dotnet/linux-x64` });
         }
         else {
-            yield exec.exec("./win10-x64/install.cmd", [], { cwd: `${cementZip}/dotnet` });
+            yield exec.exec("./install.cmd", [], { cwd: `${cementZip}/dotnet/win10-x64` });
         }
         core.addPath(`${external_os_.homedir()}/bin`);
         yield exec.exec("cm", ["--version"]);
