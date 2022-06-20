@@ -12,7 +12,7 @@ async function build(): Promise<void> {
   core.info(`Building '${github.context.ref}'`)
   
   core.startGroup("Download Cement")
-  const cementArchive = await tc.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.82/20fe13e7562b8b087213969b960141e2c6930a06.zip")
+  const cementArchive = await tc.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.83/9f8ab72b5179573c4a7a898f49e42dca0cfc4035.zip")
   const cementZip = await tc.extractZip(cementArchive, "cement-zip")
 
   core.startGroup("Install Cement")
