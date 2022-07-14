@@ -60991,12 +60991,15 @@ function build() {
         const cementArchive = yield tool_cache.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.84/2ce33cfd534be8dd8970f95ebfef30f2bb062015.zip");
         const cementZip = yield tool_cache.extractZip(cementArchive, "cement-zip");
         core.startGroup("Install Cement");
-        if (external_os_.platform() !== 'win32') {
+        if (external_os_.platform() === 'linux') {
             yield exec.exec("chmod +x ./install.sh", [], { cwd: `${cementZip}/dotnet/linux-x64` });
             yield exec.exec("./install.sh", [], { cwd: `${cementZip}/dotnet/linux-x64` });
         }
-        else {
+        else if (external_os_.platform() === 'win32') {
             yield exec.exec("./install.cmd", [], { cwd: `${cementZip}/dotnet/win10-x64` });
+        }
+        else {
+            throw `Unknown "${external_os_.platform()}" os.`;
         }
         core.addPath(`${external_os_.homedir()}/bin`);
         yield exec.exec("cm", ["--version"]);

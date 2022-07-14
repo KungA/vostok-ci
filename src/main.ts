@@ -16,12 +16,15 @@ async function build(): Promise<void> {
   const cementZip = await tc.extractZip(cementArchive, "cement-zip")
 
   core.startGroup("Install Cement")
-  if (os.platform() !== 'win32') {
+  if (os.platform() === 'linux') {
     await exec.exec("chmod +x ./install.sh", [], {cwd: `${cementZip}/dotnet/linux-x64`});
     await exec.exec("./install.sh", [], {cwd: `${cementZip}/dotnet/linux-x64`});
-  } else {
+  } else if (os.platform() === 'win32') {
     await exec.exec("./install.cmd", [], {cwd: `${cementZip}/dotnet/win10-x64`});
+  } else {
+    throw `Unknown "${os.platform()}" os.` 
   }
+  
   core.addPath(`${os.homedir()}/bin`)
   await exec.exec("cm", ["--version"]);
 
