@@ -60998,7 +60998,7 @@ function build() {
         else if (external_os_.platform() === 'win32') {
             yield exec.exec("./install.cmd", [], { cwd: `${cementZip}/dotnet/win10-x64` });
         }
-        if (external_os_.platform() === 'darwin') {
+        else if (external_os_.platform() === 'darwin') {
             yield exec.exec("chmod +x ./install.sh", [], { cwd: `${cementZip}/dotnet/osx-x64` });
             yield exec.exec("./install.sh", [], { cwd: `${cementZip}/dotnet/osx-x64` });
         }

@@ -21,7 +21,7 @@ async function build(): Promise<void> {
     await exec.exec("./install.sh", [], {cwd: `${cementZip}/dotnet/linux-x64`});
   } else if (os.platform() === 'win32') {
     await exec.exec("./install.cmd", [], {cwd: `${cementZip}/dotnet/win10-x64`});
-  } if (os.platform() === 'darwin') {
+  } else if (os.platform() === 'darwin') {
     await exec.exec("chmod +x ./install.sh", [], {cwd: `${cementZip}/dotnet/osx-x64`});
     await exec.exec("./install.sh", [], {cwd: `${cementZip}/dotnet/osx-x64`});
   } else {
