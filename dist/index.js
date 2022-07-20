@@ -61025,6 +61025,10 @@ function build() {
         yield execTool("configure-await-false", projectFolders);
         core.startGroup("Check TaskCreationOptions.RunContinuationsAsynchronously");
         yield execTool("tcs-create-options", projectFolders);
+        if (!isRelease) {
+            core.startGroup("Add version suffix");
+            yield execTool("dotnetversionsuffix", ["pre" + String(github.context.runNumber).padStart(6, "0")], { cwd: moduleFolder });
+        }
         if (core.getInput("references") == "cement") {
             core.startGroup("Build dependencies");
             yield exec.exec("cm", ["build-deps"], { cwd: moduleFolder });
@@ -61032,10 +61036,6 @@ function build() {
         else {
             core.startGroup("Replace cement references");
             yield execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json", "--ensureMultitargeted", "--useFloatingVersions"], { cwd: moduleFolder });
-        }
-        if (!isRelease) {
-            core.startGroup("Add version suffix");
-            yield execTool("dotnetversionsuffix", ["pre" + String(github.context.runNumber).padStart(6, "0")], { cwd: moduleFolder });
         }
         core.startGroup("Build");
         yield exec.exec("dotnet", ["build", "-c", "Release"], { cwd: moduleFolder });

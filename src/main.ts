@@ -53,17 +53,17 @@ async function build(): Promise<void> {
   core.startGroup("Check TaskCreationOptions.RunContinuationsAsynchronously")
   await execTool("tcs-create-options", projectFolders);
 
+  if (!isRelease) {
+    core.startGroup("Add version suffix")
+    await execTool("dotnetversionsuffix", ["pre" + String(github.context.runNumber).padStart(6, "0")], {cwd: moduleFolder});
+  }
+  
   if (core.getInput("references") == "cement") {
     core.startGroup("Build dependencies")
     await exec.exec("cm", ["build-deps"], {cwd: moduleFolder});
   } else {
     core.startGroup("Replace cement references")
     await execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json", "--ensureMultitargeted", "--useFloatingVersions"], {cwd: moduleFolder})
-  }
-  
-  if (!isRelease) {
-    core.startGroup("Add version suffix")
-    await execTool("dotnetversionsuffix", ["pre" + String(github.context.runNumber).padStart(6, "0")], {cwd: moduleFolder});
   }
   
   core.startGroup("Build")
