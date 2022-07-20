@@ -61031,7 +61031,7 @@ function build() {
         }
         else {
             core.startGroup("Replace cement references");
-            yield execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json", "--ensureMultitargeted"], { cwd: moduleFolder });
+            yield execTool("dotnetcementrefs", ["--source:https://api.nuget.org/v3/index.json", "--ensureMultitargeted", "--useFloatingVersions"], { cwd: moduleFolder });
         }
         if (!isRelease) {
             core.startGroup("Add version suffix");
