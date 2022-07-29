@@ -58,7 +58,7 @@ jobs:
         if: ${{ inputs.needs-java }}
           
       - name: Test
-        uses: vostok/github.ci@master
+        uses: vostok/github.ci@macos
         with:
           references: ${{ matrix.references }}
           framework: ${{ matrix.framework }}

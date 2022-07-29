@@ -28,6 +28,6 @@ jobs:
           dotnet-version: '2.1.x'
         
       - name: Build
-        uses: vostok/github.ci@master
+        uses: vostok/github.ci@macos
         with:
           references: ${{ matrix.references }}

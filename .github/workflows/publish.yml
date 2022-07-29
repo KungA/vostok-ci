@@ -18,6 +18,6 @@ jobs:
           dotnet-version: '6.0.x'
 
       - name: Publish
-        uses: vostok/github.ci@master
+        uses: vostok/github.ci@macos
         with: 
           key: ${{ secrets.token }}
