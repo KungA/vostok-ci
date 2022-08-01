@@ -60988,7 +60988,7 @@ function build() {
     return main_awaiter(this, void 0, void 0, function* () {
         core.info(`Building '${github.context.ref}'`);
         core.startGroup("Download Cement");
-        const cementArchive = yield tool_cache.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.94/d291a1d117f5bd785757d816d74ef977e965fd27.zip");
+        const cementArchive = yield tool_cache.downloadTool("https://github.com/skbkontur/cement/releases/download/v1.0.96/37b0721909481833156818068686611ccaa5bca0.zip");
         const cementZip = yield tool_cache.extractZip(cementArchive, "cement-zip");
         core.startGroup("Install Cement");
         if (external_os_.platform() === 'linux') {
